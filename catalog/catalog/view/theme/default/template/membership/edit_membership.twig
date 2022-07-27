@@ -1,0 +1,421 @@
+{{ header }}
+ <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-membership" class="form-horizontal">
+<div id="product-category" class="container">
+   <div class="row">
+      {{ column_left }}
+      {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+      {% elseif column_left or column_right %}
+      {% set class = 'col-xs-12 col-sm-8 col-md-9 col-lg-9' %}
+      {% else %}
+      {% set class = 'col-sm-12' %}
+      {% endif %}
+      <div id="content" class="{{ class }}">
+         {{ content_top }}
+         <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+         </ul>
+         <h1 class="co-heading">Choose Membership - Product <span class="sweight">Total weight Allow:{{kgweight}}Kg - (<p class="pweight">{{total}}</p>)</span></h1>
+         <div class="col-md-12">
+            <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-membership" class="form-horizontal">
+               <div class="table-responsive">
+                  <table class="table table-bordered table-hover" id="myTable">
+                     <thead style="background: #eee;">
+                        <tr>
+                           <th style="display:none;">#</th>
+                           <th>Image</th>
+                           <th>Product Name</th>
+                           <th>Delivery days</th>
+                           <th>Weight</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% if products %}
+                        {% for product in products %}
+                        <tr id="row_{{product.product_id}}">
+                           <td class="text-center" style="display:none;"><input type="checkbox"  name="productId[]" id="chpid_{{product.product_id}}" {{product.chked}} value="{{product.product_id}}"> </td>
+                           <td class="text-center"> 
+                              {% if product.insp_images %}
+
+                              <img src="{{product.insp_images}}" style="width: 50px;float: left;" alt="{{product.name}}" class="img-thumbnail"> 
+                            {% else %}
+                             <img src="{{product.thumb}}" style="width: 50px;float: left;" alt="{{product.name}}" class="img-thumbnail"> 
+                            {% endif %}
+
+                           </td>
+                           <td class="text-left">{{product.name}}</td>
+                           <td class="text-left">
+                              {% if product.dresult %}
+                              <select name="dday[]" id="dday" class="form-control dday changedropdown  dday_{{product.product_id}}" data-id="{{product.product_id}}">
+                                 <option value="">Select days</option>
+                                 {% for item in product.dresult %}
+                                 {% if item.delivery_settings_id==product.selected_slot_id %}
+                                	 <option selected="selected" value="{{item.id}}">{{item.name}}</option>
+                                 {% else %}
+                               		  <option value="{{item.id}}">{{item.name}}</option>
+                                 {%endif%}
+                                 {% endfor %}
+                              </select>
+                              {% endif %}
+                           <td class="text-left">
+                              {% if product.wresult %}
+                              <select name="weight[]" id="weight" class="form-control wgt weight changedropdown  weight__{{product.product_id}}" data-id="{{product.product_id}}">
+                                 <option value="">Select weight</option>
+                                 {% for item in product.wresult %}
+                                   {% if item.id==product.selected_weigth_id %}
+                                 <option selected="selected" value="{{item.id}}" data-value="{{item.value}}" data-id="{{product.product_id}}">{{item.name}}</option>
+                                  {% else %}
+                                      <option value="{{item.id}}" data-value="{{item.value}}" data-id="{{product.product_id}}">{{item.name}}</option>
+                                  {%endif%}
+                                 {% endfor %}
+                              </select>
+                              {% endif %}
+                           </td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                     </tbody>
+                  </table>
+               </div>
+               <input type="hidden" name="tsvalue" id="tsvalue" value=""> 
+            </form>
+             <h1 class="co-heading">Total weight Allow<span class="sweight">:{{kgweight}}Kg - (<p class="pweight">{{total}}</p>)</span></h1>
+            <div class="row">
+               <div class="buttons">
+                  <div class="pull-left"><a  href="{{backlink}}"  class="btn btn-primary ">Back</a></div>
+                  <div class="pull-right"><a  class="btn btn-primary  btn-save">Next</a></div>
+               </div>
+            </div>
+         </div>
+         {{ content_bottom }}
+      </div>
+      {{ column_right }}
+   </div>
+<div class="modal" tabindex="-1" role="dialog" id="modal-developer" style="z-index:100000">
+
+
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title"><i class="fa fa-cog"></i> <strong>Select Time slot</strong></h4>
+         </div>
+         <div class="modal-body">
+            <table class="table table-bordered" id="tblslot">
+               <thead>
+                  <tr>
+                     <td>Days</td>
+                     <td style="width: 150px;">Time</td>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% if dsetting %}
+                  {% for day in dsetting %}
+                  <tr>
+                     <td>
+                        <div class="btn-group" data-toggle="buttons">    
+                           <label class="active">
+                              {{day.name}}
+                           </label>
+                        </div>
+                     </td>
+                     <td class="text-right">
+                           {% if timeslot %}
+                              <select required name="vslot[{{day.id}}][]" id="vslot" class="form-control vslot">
+                                 <option value="">Select Time Slot</option>
+                                 {% for v in timeslot %}
+                                 <option value="{{v.id}}">{{v.name}}</option>
+                                 {% endfor %}
+                              </select>
+                              {% endif %}
+
+                     </td>
+                  </tr>
+                  {% endfor %}
+                  {% endif %}
+               </tbody>
+            </table>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-time-slot">Save changes</button>
+            <button type="button" class="btn btn-secondar btn-close-modal" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
+
+</div>
+
+
+    </form>
+</div>
+
+
+<style type="text/css">
+   .fa {
+   /* display: inline-block; */
+   font: normal normal normal 14px/1 FontAwesome;
+   font-size: inherit;
+   text-rendering: auto;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   }
+</style>
+<!--<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>-->
+<script type="text/javascript">
+   $(document).ready( function () {
+      /* $('#myTable').DataTable({
+          "pageLength": 50
+       });*/
+       $('.changedropdown').on('change',function(){
+          var pid=$(this).attr('data-id');
+          if(!$(this).val()){
+              $('#chpid_'+pid).prop( "checked", false );
+          }else{
+             $('#chpid_'+pid).prop( "checked", true );
+          }
+          
+
+       })
+
+
+       $('.btn-close-modal').on('click',function(){
+       
+       })
+        var item=[];
+        var data={{pweight}};
+        if(data.length>0){
+        $.each(data, function(i,val){
+            item.push({
+                 pid: val.product_id, 
+                 pval:val.weight
+            })
+         })
+      }
+      console.log(item);
+      var weighttotal=0;
+      var totalweightallow={{totalweight}};
+
+       $('.wgt').on('change',function(){
+            let selpid=$(this).attr('data-id');
+            let pid=$(this).find(':selected').attr('data-id');      
+            let pval=$(this).find(':selected').attr('data-value');
+
+
+   
+           if(item.length==0){
+              item.push({
+                  pid: pid, 
+                  pval:pval
+              });
+            }else{
+             
+              $.each(item, function(i){
+
+                   if (item[i]) {
+                        if(item[i].pid===selpid || pval==='') {
+                            item.splice(i,1);
+                        }
+
+                    }
+
+                });
+                if(pval){
+                  item.push({
+                    pid: pid, 
+                    pval:pval
+                  });     
+              }
+
+
+            }
+              var totalw=0;
+             $.each(item, function(i){
+                totalw +=parseInt(item[i].pval);
+                  
+             });
+
+             totalw=totalw/1000;
+             $('.pweight').text(totalw+'Kg');
+             
+
+    
+       })
+
+
+       
+       $('.vslot').on('change',function(){
+           var ct= $('#tsvalue').val();
+           if(ct){
+            ct =parseInt(ct)+1;
+          }else{
+            ct=1;
+          }
+            $('#tsvalue').val(ct);
+         
+
+       });
+       var  total=0;
+       $('#weight').on('change',function(){
+           var text=$(this).text();
+           total =parseInt(total)+parseInt(text);
+           $('.pweight').show();
+       })
+      
+       $('.btn-time-slot').on('click',function(){
+            var flag=1;
+           
+              var ct= $('#tsvalue').val();
+
+             if(ct<2 || ct==''){
+              $(".btn-time-slot").notify(
+                     "Please select all time slot", 
+                     "error",
+                     { position:"right" }
+                 );
+
+              return false;
+             }
+
+            $(".btn-save").click();
+            $('#modal-developer').modal('hide');  
+       })
+       $('.btn-save').on('click',function(){
+            var valid = 1;
+            var warr=[];
+            var darr=[];
+
+
+            if(item.length!=0){
+                 var totalw=0;
+                 $.each(item, function(i){
+                    totalw +=parseInt(item[i].pval);
+                      
+                 });
+                if(totalw>=totalweightallow){
+                       $(".btn-save").notify(
+                         "You have allow weight:"+{{kgweight}}+'Kg', 
+                         "error",
+                         { position:"right" }
+                       );
+                    return false;
+                }
+
+            }
+            
+            $('#myTable tr td').each(function () {
+              var dday =  $(this).find("select.dday option:selected").val();
+              var weight = $(this).find("select.weight option:selected").val();
+
+              if (typeof dday  !== "undefined" ){
+
+                var dday=parseInt(dday);
+                if(dday){
+                  darr.push(dday);
+                }
+               
+               
+              }
+
+              if ( typeof weight  !== "undefined" ){
+                 
+                   var weight=parseInt(weight);
+                if(weight){
+                  warr.push(weight);
+                }
+               
+               
+              }
+            });
+             
+             if(warr.length===0 && darr.length===0){
+                $(".btn-save").notify(
+                     "Please select day and weight!", 
+                     "error",
+                     { position:"right" }
+                 );
+
+                 return false;
+             }
+             if(warr.length!=darr.length){
+                $(".btn-save").notify(
+                     "Date mismatch issue, Please select day and weight!", 
+                     "error",
+                     { position:"right" }
+                 );
+
+                 return false;
+             }
+            
+             message = '';
+
+             if($('#tsvalue').val()==''){
+               $('#modal-developer').modal('toggle');  
+               return false;
+             }
+            
+   
+            $(this).prop('disabled',true);
+            $('.btn-save').html('<img width="20px" height="20px" src="https://iavocado.in/preloader.gif"> Next');
+           $.ajax({
+             url: 'index.php?route=account/membership/editSave',
+             type: 'post',
+             data: $('#form-membership').serialize(),
+             dataType: 'json',
+             beforeSend: function() {
+               $('#form-membership > button').button('loading');
+             },
+             complete: function() {
+               $('#form-membership > button').button('reset');
+             },
+             success: function(json) {
+                $(this).prop('disabled',false);
+                $('.btn-save').html('Next');
+                if(json.status=='success'){
+                   location=json.redirect;
+                }
+                else if(json.status=='error'){
+                    $(".btn-save").notify(
+                     ""+json.message, 
+                     "error",
+                     { position:"right" }
+                   );
+                }
+                else if(json.error=='data_empty'){
+                    $(".btn-save").notify(
+                     "Please select products", 
+                     "error",
+                     { position:"right" }
+                   );
+                }
+                else if(json.error=='data_issue'){
+                    $(".btn-save").notify(
+                     "We got some error, Please try again.", 
+                     "error",
+                     { position:"right" }
+                   );
+                }else if(json.error=='data_mismatch'){
+                    $(".btn-save").notify(
+                     "Data mismatch,Please select days and weight.", 
+                     "error",
+                     { position:"right" }
+                   );
+                }else{
+                  //location.reload();
+                }
+             },
+             error: function(xhr, ajaxOptions, thrownError) {
+   
+               alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+   
+             }
+   
+            });
+         
+       })
+   
+   } );
+   
+</script>
+{{ footer }}

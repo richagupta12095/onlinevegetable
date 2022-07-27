@@ -1,0 +1,44 @@
+<div class="tab-pane active" id="tab-sending-methods">
+    <fieldset>
+        <legend>Sending methods</legend>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="smshare_core_cfg_sender_profile">Send SMS using:</label>
+            <div class="col-sm-10">
+                <select id="smshare_core_cfg_sender_profile" name="smshare_core_cfg_sender_profile" class="form-control">
+                    <option value="profile_android" {{ smshare_core_cfg_sender_profile == ''                ? 'selected' : '' }}>Please choose</option>
+                    <option value="profile_android" {{ smshare_core_cfg_sender_profile == 'profile_android' ? 'selected' : '' }}>Android</option>
+                    <option value="profile_gateway" {{ smshare_core_cfg_sender_profile == 'profile_gateway' ? 'selected' : '' }}>Gateway</option>
+                </select>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+
+            <div class="col-sm-2">
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="#tab-android" data-toggle="tab">Android</a></li>
+                    <li><a href="#tab-gateway" data-toggle="tab">Gateway</a></li>
+                </ul>
+            </div>
+
+            <div class="col-sm-10">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-android">
+                        {{ tab_sending_methods_android }}
+                    </div>
+
+                    <div class="tab-pane" id="tab-gateway">
+                        {{ tab_sending_methods_gateway }}
+                    </div><!-- #tab-gateway -->
+
+                </div><!-- .tab-content -->
+
+            </div><!-- .col -->
+
+        </div>
+
+    </fieldset>
+</div>

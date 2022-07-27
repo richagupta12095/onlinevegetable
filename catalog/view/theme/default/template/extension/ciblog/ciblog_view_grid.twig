@@ -1,0 +1,28 @@
+{% set sm = 6 %}
+{% if blog_row %} {% set sm = 12/blog_row %} {% endif %}
+{% for blogpost in blogposts %}
+<div class="ciblogpost ciblog-layout ciblog-grid col-sm-{{ sm }} col-xs-12">
+  {% if show_title %}<h4><a href="{{ blogpost.href }}">{{ blogpost.name }}</a></h4><hr class="hr">{% endif %}
+  <ul class="ciblog-info list-inline">
+    {% if show_author and blogpost.author.name %}<li><label>{{ text_postby }}</label><span><a href="{{ blogpost.author.href }}">{{ blogpost.author.name }}</a></span></li>{% endif %}
+    {% if show_date_publish %}<li><label>{{ text_on }}</label><span><a href="{{ blogpost.search_date_added }}">{{ blogpost.date_added }}</a></span></li>{% endif %}
+    {% if blogpost.rating %}<li><label>{{ text_rating }}</label> <span class="ciblog-rating rating">{% for i in 1..5 %}{% if blogpost.rating < i %}<span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>{% else %}<span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>{% endif %}{% endfor %}</span></li>{% endif %}
+  </ul>
+  <div class="ciblog-thumb">
+    {% if image_show_listing %}<div class="image img-radius"><a href="{{ blogpost.href }}"><img src="{{ blogpost.thumb }}" alt="{{ blogpost.name }}" title="{{ blogpost.name }}" class="img-responsive" /></a></div>{% endif %}
+    <div>
+      <div class="ciblog-caption">
+        <div class="ciblog-view">
+          <ul class="list-inline">
+            {% if show_total_view %}<li><i class="fa fa-eye"></i> {{ blogpost.viewed }}</li>{% endif %}
+            {% if like_show_total %}<li class="hearting" data-blogid="{{ blogpost.ciblog_post_id }}">{% if blogpost.isMyHeart %}<i class="fa fa-heart"></i>{% else %}<i class="fa fa-heart-o {% if can_like %}cimyheart{% endif %}"></i>{% endif %} <span>{{ blogpost.heart }}</span></li>{% endif %}
+            {% if comment_show_total %}<li><i class="fa fa-comments"></i> {{ blogpost.comments }}</li>{% endif %}
+          </ul>
+        </div>
+        {% if show_description %}<div class="ciblog-description"><p>{{ blogpost.description }}</p></div>{% endif %}
+        <a href="{{ blogpost.href }}" class="btn btn-primary">{{ button_read_more }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}

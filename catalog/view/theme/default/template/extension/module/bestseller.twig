@@ -1,0 +1,141 @@
+<div class="pro-bg">
+  <h2>{{ heading_title }}</h2><hr>
+<div class="pro-nepr" id="featurep">
+
+
+  <div id="bestseller" class="owl-theme owl-carousel">
+ {% for product in products %}
+ 
+  <div class="product-layout col-xs-12 ">
+    <div class="product-thumb transition   cart_div_{{ product.product_id }} {% if product.background == 'yes' %} selected-product {% endif %}" ">
+      <div class="image alert_{{ product.product_id }}"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive center-block" /></a>
+          <!-- insp Images Start -->
+                        {% set t = 0 %}
+                          {% for insp_image in product.insp_images %}
+                          {% if t == 0 %}
+                           <a href="{{ product.href }}"><img src="{{ insp_image.popup }}" class="img-responsive second-img" alt="hover image"/></a>
+                          {% set t = t + 1 %}
+                          {% endif %}
+                        {% endfor %}
+        <!-- insp Images End -->
+        {% if product.price %}
+          {% if product.special %}
+              {% if product.quantity == 0 %} 
+                <span class="salepro">Out of Stock</span>
+              {% else %}
+                <span class="salepro">In Stock</span>
+              {% endif %}
+          {% endif %}
+            {% if product.discount > 0 %} 
+          <span  class="salepro right css-salepro">{{ product.discount }}% Off</span>          
+          {% endif %} 
+          
+      {% endif %}
+      </div>
+      <div class="caption text-center ">
+        {# <p>{{ product.description }}</p> #}
+        <h4><a href="{{ product.href }}">{{ product.name }}</a></h4>
+        {% if product.price %}
+        <p class="price">
+          {% if not product.special %}
+          {{ product.price }}
+          {% else %}
+          <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span>
+          {% endif %}
+         {#  {% if product.tax %}
+          <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+          {% endif %} #}
+        </p>
+        {% endif %}
+
+          {% if product.quantity > 0 %}  
+        <div class="prd_cart_{product.product_id}}">  
+          <div class="col-xs-12"> 
+             {% if product.cqty %}
+
+             {% else %}
+           <div class="cls_qty_{{product.product_id}}" style="display:inline-block;">
+            <input type="hidden" name="qty" id="qty_{{product.product_id}}" size="1" value="{{product.minimum}}" >
+            <div class="input-group" qa="qty" style="display:inline;"><span class="input-group-addon">Qty</span></div>
+          </div>
+          {%endif %}
+         {% if product.cqty %}
+
+          <input type="button" id="decrease"  class ="decrease_{{product.product_id}} minus" value="-"  data-id="{{product.product_id}}"/>
+          {% else %}
+          <input type="button" id="decrease" style="display:none;" class ="decrease_{{product.product_id}} minus" value="-"  data-id="{{product.product_id}}"/>
+          {% endif%}
+
+          {% if product.cqty %}
+          <input type="text" name="qty" id="quantity_{{product.product_id}}" size="3" value="{{product.cqty}}" maxlength="2" >
+          {% else %}
+          <input type="text" name="qty" id="quantity_{{product.product_id}}" size="3" value="{{product.minimum}}" maxlength="2" >
+          {% endif %}
+
+        {% if product.cqty %}          
+          <input type="button" id="increase"  class="increase_{{product.product_id}} plus " data-id="{{product.product_id}}" value="+" />
+        {% else %}
+        <input type="button" id="increase" style="display:none;" class="increase_{{product.product_id}} plus " data-id="{{product.product_id}}" value="+" />
+        {% endif %}
+          </div>
+     
+        </div>
+        {% endif %}
+
+        <div class="clearfix"></div><br/><br/>
+
+         {% if product.rating %}
+          <div class="rating">
+            {% for i in 1..5 %}
+            {% if product.rating < i %}
+            <span class="fa fa-stack">
+              <i class="fa fa-star-o fa-stack-2x"></i>
+            </span>
+            {% else %}
+            <span class="fa fa-stack">
+              <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+            </span>
+            {% endif %}
+          {% endfor %}</div>{% else %}
+          <div class="rating">{% for i in 1..5 %}
+          <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+          {% endfor %}</div>
+        {% endif %}
+      </div>
+      <div class="button-group text-center m-button">
+          {% if product.quantity > 0 %}      
+           {% if product.button!='yes' %}  
+        <button type="button" onclick="cart.add('{{ product.product_id }}');" class="pcart pcart crt_{{product.product_id}}"">
+          <span>{{ button_cart }}</span>
+        </button>
+        {% endif %}
+        {% endif %}
+
+        <button type="button" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');" class="pwish"><i class="fa fa-heart-o"></i><span class="hidden-xs">{# {{ button_wishlist }} #}</span></button>
+        <!--<button type="button" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');" class="pcom">{# <i class="fa fa-compress"></i><span class="hidden-xs"> #}<span>+ {{ button_compare }}</span></button>-->
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+</div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+    $("#bestseller").owlCarousel({
+    itemsCustom : [
+    [0, 1],
+    [375, 2],
+    [600, 3],
+    [768, 2],
+    [992, 3],
+    [1200, 4]
+    ],
+      // autoPlay: 1000,
+      navigationText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
+      navigation : true,
+      pagination:false
+    });
+    });
+</script>

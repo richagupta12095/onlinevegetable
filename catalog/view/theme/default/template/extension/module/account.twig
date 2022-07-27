@@ -1,0 +1,24 @@
+<div class="list-group">
+  {% if not logged %}
+  <a href="{{ login }}" class="list-group-item"><i class="fa fa-briefcase" aria-hidden="true"></i> {{ text_login }}</a> 
+  <a href="{{ register }}" class="list-group-item"><i class="fa fa-id-card" aria-hidden="true"></i> {{ text_register }}</a> 
+  <a href="{{ forgotten }}" class="list-group-item"><i class="fa fa-key" aria-hidden="true"></i> {{ text_forgotten }}</a>
+  {% endif %}
+  <a href="{{ account }}" class="list-group-item"> <i class="fa fa-user-o" aria-hidden="true"></i> {{ text_account }}</a>
+  {% if logged %}
+  <a href="{{ edit }}" class="list-group-item"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>{{ text_edit }}</a> 
+  <a href="{{ password }}" class="list-group-item"><i class="fa fa-key" aria-hidden="true"></i> {{ text_password }}</a>
+  {% endif %}
+  <a href="{{ address }}" class="list-group-item"><i class="fa fa-id-card-o" aria-hidden="true"></i> {{ text_address }}</a> 
+  <!--<a href="{{ wishlist }}" class="list-group-item"><i class="fa fa-briefcase" aria-hidden="true"></i> {{ text_wishlist }}</a> -->
+  <a href="{{ order }}" class="list-group-item"><i class="fa fa-file" aria-hidden="true"></i> {{ text_order }}</a> 
+   <!--<a href="{{ download }}" class="list-group-item"><i class="fa fa-download" aria-hidden="true"></i> {{ text_download }}</a>-->
+   <!--<a href="{{ recurring }}" class="list-group-item"><i class="fa fa-file-text-o" aria-hidden="true"></i> {{ text_recurring }}</a> -->
+  <a href="{{ reward }}" class="list-group-item"><i class="fa fa-file-audio-o" aria-hidden="true"></i> {{ text_reward }}</a> 
+  <a href="{{ return }}" class="list-group-item"><i class="fa fa-reply" aria-hidden="true"></i> {{ text_return }}</a> 
+  <a href="{{ transaction }}" class="list-group-item"><i class="fa fa-file-code-o" aria-hidden="true"></i> {{ text_transaction }}</a> 
+  <a href="{{ newsletter }}" class="list-group-item"><i class="fa fa-newspaper-o" aria-hidden="true"></i> {{ text_newsletter }}</a>
+  {% if logged %}
+  <a href="{{ logout }}" class="list-group-item"><i class="fa fa-sign-out" aria-hidden="true"></i> {{ text_logout }}</a>
+  {% endif %}
+</div>

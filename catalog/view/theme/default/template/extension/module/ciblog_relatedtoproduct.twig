@@ -1,0 +1,57 @@
+<div class="ciblog-relatedtoproduct ciblog-sidelayout ciblog-content" id="ciblog-relatedtoproduct{{ module }}">
+  <h3>{{ text_title }}</h3>
+  {% if view == 'few' %}
+    {% for blogpost in blogposts %}
+      {% set blogpost = blogpost|merge({'image_thumb_width': few_width ~ 'px'}) %}
+      {% set blogpost = blogpost|merge({'image_thumb_height': few_height ~ 'px'}) %}
+      <div class="post-container row">
+        <a href="{{ blogpost.href }}">
+          {% set caption_sm = 12 %}
+          {% if image_show_listing %}
+          {% set caption_sm = 8 %}
+          <div class="post-image col-sm-4">
+           <div class="image img-radius">{% if blogpost.add_video_url %}<div class="civideo-container"><iframe width="{{ blogpost.image_thumb_width }}" height="{{ blogpost.image_thumb_height }}" src="{{ blogpost.video_url }}" frameborder="0" allowfullscreen></iframe></div>{% else %}<a href="{{ blogpost.href }}"><img src="{{ blogpost.thumb }}" alt="{{ blogpost.image_alt }}" title="{{ blogpost.image_title }}" class="img-responsive" /></a>{% endif %}</div>
+          </div>
+          {% endif %}
+          <div class="post-caption col-sm-{{ caption_sm }}">
+            <h4>{{ blogpost.name }}</h4>
+            {# <p>{{ blogpost.description }}</p> #}
+          </div>
+          <div class="clearfix"></div>
+        </a>
+      </div>
+    {% endfor %}
+  {% endif %}
+  {% if view == 'more' %}
+  <div class="row ciblog-layout1">
+    {% set sm = 6 %}
+    {% if blog_row %} {% set sm = 12/blog_row %} {% endif %}
+    {% for blogpost in blogposts %}
+      <div class="ciblogpost ciblog-layout ciblog-grid col-sm-{{ sm }} col-xs-12">
+        {% if show_title %}<h4><a href="{{ blogpost.href }}">{{ blogpost.name }}</a></h4><hr class="hr">{% endif %}
+        <ul class="ciblog-info list-inline">
+          {% if show_author and blogpost.author.name %}<li><label>{{ text_postby }}</label> <span><a href="{{ blogpost.author.href }}">{{ blogpost.author.name }}</a></span></li>{% endif %}
+          {% if show_date_publish %}<li><label>{{ text_on }}</label> <span><a href="{{ blogpost.search_date_added }}">{{ blogpost.date_added }}</a></span></li>{% endif %}
+          {% if blogpost.rating %}<li><label>{{ text_rating }}</label> <span class="ciblog-rating rating">{% for i in 1..5 %}{% if blogpost.rating < i %}<span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>{% else %}<span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>{% endif %}{% endfor %}</span></li>{% endif %}
+        </ul>
+        <div class="ciblog-thumb">
+          {% if image_show_listing %}<div class="image img-radius">{% if blogpost.add_video_url %}<div class="civideo-container"><iframe width="{{ blogpost.image_thumb_width }}" height="{{ blogpost.image_thumb_height }}" src="{{ blogpost.video_url }}" frameborder="0" allowfullscreen></iframe></div>{% else %}<a href="{{ blogpost.href }}"><img src="{{ blogpost.thumb }}" alt="{{ blogpost.image_alt }}" title="{{ blogpost.image_title }}" class="img-responsive" /></a>{% endif %}</div>{% endif %}
+          <div>
+            <div class="ciblog-caption">
+              <div class="ciblog-view">
+                  <ul class="list-inline">
+                  {% if show_total_view %}<li><i class="fa fa-eye"></i> {{ blogpost.viewed }}</li>{% endif %}
+                  {% if like_show_total %}<li class="hearting" data-blogid="{{ blogpost.ciblog_post_id }}">{% if blogpost.isMyHeart %}<i class="fa fa-heart"></i>{% else %}<i class="fa fa-heart-o {% if can_like %}cimyheart{% endif %}"></i>{% endif %} <span>{{ blogpost.heart }}</span></li>{% endif %}
+                  {% if comment_show_total %}<li><i class="fa fa-comments"></i> {{ blogpost.comments }}</li>{% endif %}
+                  </ul>
+              </div>
+              {% if show_description %}<div class="ciblog-description"><p>{{ blogpost.description }} </p></div>{% endif %}
+              <a class="btn btn-primary" href="{{ blogpost.href }}" class="">{{ button_read_more }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>

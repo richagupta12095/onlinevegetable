@@ -1,0 +1,57 @@
+<div class="tab-pane" id="tab-number-insight">
+    <fieldset>
+        <legend>ProWebSms Number Insight API (requires PRO plan)</legend>
+
+        <p>Ask ProWebSms API correct number format based on customer country</p>
+        <p>This is useful if customers are allowed to enter number in both national and international format but in the
+            same time,
+            you need the phone number in a specific format before it is accepted by the SMS gateway</p>
+
+        <p>Based on the phone number (in any format, both national or international) and the customer's country code,
+            the API is able to produce a number in the format you specify here below.</p>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="smshare_core_cfg_number_insight_status">
+                Status
+            </label>
+            <div class="col-sm-9">
+                <div class="form-control" style="border: none; box-shadow: none;">
+
+                    <!-- I used this Label layout for better arabic support -->
+                    <label>
+                        <input type="radio" name="smshare_core_cfg_number_insight_status"
+                               value="1" {{ smshare_core_cfg_number_insight_status ? "checked" : "" }}
+                               id="smshare_core_cfg_number_insight_status"
+                        />
+                        Enable
+                    </label>
+
+                    <label style="padding: 0 22px;"></label>
+
+                    <label>
+                        <input type="radio" name="smshare_core_cfg_number_insight_status"
+                               value="0" {{ smshare_core_cfg_number_insight_status ? "" : "checked" }}
+                        />
+                        Disable
+                    </label>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="smshare_core_cfg_number_insight_format">
+                Number format
+            </label>
+            <div class="col-sm-9">
+                <input type="text" id="smshare_core_cfg_number_insight_format" name="smshare_core_cfg_number_insight_format"
+                       value="{{ smshare_core_cfg_number_insight_format }}" class="form-control" size="41" />
+                <small>
+                    This is the number format that will be used by the API to produce the correct phone number
+                </small>
+            </div>
+
+        </div>
+
+
+    </fieldset>
+</div>

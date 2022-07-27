@@ -1,0 +1,46 @@
+<div style="background-color: #f8f8ff; padding: 15px;">
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_basic_http_auth_status">
+            Basic HTTP Auth Status
+        </label>
+        <div class="col-sm-9">
+            <div class="radio">
+
+                <!-- I used this Label layout for better arabic support -->
+                <label>
+                    <input type="radio" name="smshare_core_cfg_basic_http_auth_status"
+                           value="1" {{ smshare_core_cfg_basic_http_auth_status ? "checked" : "" }}
+                           id="smshare_core_cfg_basic_http_auth_status" />
+                    Enable
+                </label>
+
+                <label style="padding: 0 22px;"></label>
+
+                <label>
+                    <input type="radio" name="smshare_core_cfg_basic_http_auth_status"
+                           value="0" {{ smshare_core_cfg_basic_http_auth_status ? "" : "checked" }} />
+                    Disable
+                </label>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_basic_http_auth_username">Basic HTTP Auth username</label>
+        <div class="col-sm-9">
+            <input type="text" id="smshare_core_cfg_basic_http_auth_username" name="smshare_core_cfg_basic_http_auth_username" value="{{ smshare_core_cfg_basic_http_auth_username }}" class="form-control" />
+            <div class="help-block">Sometimes it is called also: authid or AccountSid. Check your gateway API doc</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_basic_http_auth_password">Basic HTTP Auth password</label>
+        <div class="col-sm-9">
+            <input type="text" id="smshare_core_cfg_basic_http_auth_password" name="smshare_core_cfg_basic_http_auth_password" value="{{ smshare_core_cfg_basic_http_auth_password }}" class="form-control" />
+            <div class="help-block">Sometimes it is called also: AuthToken. Check your gateway API doc</div>
+        </div>
+    </div>
+
+</div>

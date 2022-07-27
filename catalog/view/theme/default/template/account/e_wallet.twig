@@ -1,0 +1,233 @@
+{{ header }}
+<div class="container">
+  <div class=""><div class="col-md-12 col-sm-12 col-xs-12">
+  {% if success %}
+    <div class="alert alert-success"><i class="fa fa-exclamation-circle"></i><span>{{ success }}</span></div>
+  {% endif %}
+  {% if error %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i><span>{{ error }}</span></div>
+  {% endif %}
+  <div class="alert alert-danger" style="display: none;"><i class="fa fa-exclamation-circle"></i><span></span></div>
+  </div></div>
+  
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-8' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}    
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+	<ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+      <h1 class="co-heading">{{ heading_title }}</h1>
+	  <div class="row">
+	  
+      <div class="col-xs-12">
+        <div class="well">
+          <form action="{{ add_money }}" id="add-money-form" method="post">
+            <div class="row">
+              <div class="col-md-3 col-sm-6 col-xs-6" style="padding:0px;">
+                <div style="z-index: 10;position: relative;">
+                  <a style="color: #666;">
+                    <div style="float: left;line-height: 42px; margin-right:10px;">
+                      <img src="{{ e_wallet_icon_url }}" />
+                    </div>
+                    <div style="float: left;margin-left: 5px;line-height: 21px;">
+                      <div style="font-size: 14px;">{{ text_balance }}</div>
+                      <div><b><span style="font-size: 17px;" >{{ balance }}</span></b></div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-4 col-xs-6 ">
+                <input type="number" name="amount" value="" placeholder="{{ text_amount }}" id="input-amount" class="form-control">
+              </div>
+              <div class="col-sm-12 col-md-5 col-xs-12 margintop20">
+                <button type="submit" class="btn btn-primary pull-right">{{ text_add_money }}</button>
+              </div>
+            </div>
+          </form>
+          <div class="pp-form" style="display: none;" class="hide" ></div>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <span class="input-group-btn" style="padding-bottom: 10px;">
+          <a class="btn btn-primary pull-right" href id="add_bank_btn">{{ text_add_bank }}</a>
+          <a class="btn btn-primary pull-right" href="{{ withdrawreq }}">{{ text_withdrawreq }}</a>
+          <a class="btn btn-primary pull-right" href="{{ send_money }}">{{ text_send_money }}</a>
+        </span>
+      </div>
+      <div class="col-md-12">
+        <form class="form-inline" action="{{ formurl }}" method="post">
+          <div class="form-group">
+            <label for="datefrom">From Date</label>
+            <input type="text" class="form-control date" value="{{ datefrom }}" name="datefrom" id="datefrom">
+          </div>
+          <div class="form-group">
+            <label for="dateto">TO</label>
+            <input type="text" class="form-control date" value="{{ dateto }}" name="dateto" id="dateto">
+          </div>
+          <button type="submit" class="btn btn-default">Generate</button>
+        </form>
+        <br>
+      </div>
+      <div class="col-md-12">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{{ text_date }}</th>
+                <th>{{ text_desc }}</th>
+                <th>{{ text_credit }}</th>
+                <th>{{ text_debit }}</th>
+                <th>{{ column_balance }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% set debittotal = 0 %}
+              {% set balancetotal = 0 %}
+              {% set credittotal = openningbalance %}
+              {% if e_wallet_list %}
+              {% set i = 0 %}
+              {% set list = e_wallet_list|length %}                 
+              {% for v in e_wallet_list %} 
+              {% set i = i + 1 %}
+              {% set credittotal = credittotal + v.o_credit %}
+              {% set debittotal = debittotal + v.o_debit %}
+                    <tr>
+                      <td>{{ v.date }}</td>
+                      <td>{{ v.description }}</td>
+                      <td>{{ v.credit }}</td>
+                      <td>{{ v.debit }}</td>
+                      <td>{{ v.balance }}</td>
+                    </tr>
+              {% endfor %}
+              {% endif %}
+                <tr>
+                  <td>{{ datefrom|date_modify("-1 day")|date("d-m-Y h:i A") }}</td>
+                  <td>Opening Balance</td>
+                  <td>{{ ccurrency.format(openningbalance,config_currency) }}</td>
+                  <td></td>
+                  <td>{{ ccurrency.format(openningbalance,config_currency) }}</td>
+                </tr>
+            </tbody>
+            <tfoot style="background: #eee;">
+              <tr>
+                <th colspan="2">Total</th>
+                <th>{{ ccurrency.format(credittotal,config_currency) }}</th>
+                <th>{{ ccurrency.format(debittotal,config_currency) }}</th>
+                <th>{{ ccurrency.format(credittotal - debittotal,config_currency) }}</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+		</div>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+<div id="add_bank_modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h3>Bank Details.</h3>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="">
+            <form class="form-horizontal" id="form-bank" action="{{ add_bank }}" method="post">
+			
+			<div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group">
+                <label class="col-sm-12 control-label" for="input-bank-name">Bank Name</label>
+                <div class="col-sm-12">
+                  <input type="text" name="bank[name]" value="{{ bank.name }}" placeholder="Bank Name" id="input-bank-name" class="form-control">
+                </div>
+              </div></div>
+			<div class="col-md-6 col-sm-6 col-xs-12"> <div class="form-group">
+                <label class="col-sm-12 control-label" for="input-bank-branch-number">ABA/BSB number (Branch Number)</label>
+                <div class="col-sm-12">
+                  <input type="text" name="bank[branch_number]" value="{{ bank.branch_number }}" placeholder="ABA/BSB number (Branch Number)" id="input-bank-branch-number" class="form-control">
+                </div>
+              </div></div>
+			<div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group">
+                <label class="col-sm-12 control-label" for="input-bank-swift-code">SWIFT Code</label>
+                <div class="col-sm-12">
+                  <input type="text" name="bank[swift_code]" value="{{ bank.swift_code }}" placeholder="SWIFT Code" id="input-bank-swift-code" class="form-control">
+                </div>
+              </div></div>
+			<div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group">
+                <label class="col-sm-12 control-label" for="input-bank-ifsc-code">IFSC Code</label>
+                <div class="col-sm-12">
+                  <input type="text" name="bank[ifsc_code]" value="{{ bank.ifsc_code }}" placeholder="IFSC Code" id="input-bank-ifsc-code" class="form-control">
+                </div>
+              </div></div>
+			<div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group">
+                <label class="col-sm-12 control-label" for="input-bank-account-name">Account Name</label>
+                <div class="col-sm-12">
+                  <input type="text" name="bank[account_name]" value="{{ bank.account_name }}" placeholder="Account Name" id="input-bank-account-name" class="form-control">
+                </div>
+              </div></div>
+			<div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group">
+                <label class="col-sm-12 control-label" for="input-bank-account-number">Account Number</label>
+                <div class="col-sm-12">
+                  <input type="text" name="bank[account_number]" value="{{ bank.account_number }}" placeholder="Account Number" id="input-bank-account-number" class="form-control">
+                </div>
+              </div></div>
+			
+			
+              
+             
+              
+              
+              
+              
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer ">
+        <button type="button" class="btn btn-primary" id="bank_save_btn" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  $('#add_bank_btn').click(function(){
+    $('#add_bank_modal').modal('show');
+    return false;
+  });
+  $('#bank_save_btn').click(function(){
+    var _btn = $(this),
+        url = $('#form-bank').attr('action'),
+        data = $('#form-bank').serialize();
+    $(_btn).button('loading');
+    $.ajax({
+      url:url,
+      data:data,
+      type:'post',
+      dataType:'json',
+      success:function(d){
+        if(d && typeof d.success != 'undefined'){
+          $('#add_bank_modal').modal('hide');
+        }
+      },complete:function(){
+        $(_btn).button('reset');
+      }
+    });
+    return false;
+  });
+  $('.date').datetimepicker({
+    pickTime: false
+  });
+</script>
+{{ footer }}

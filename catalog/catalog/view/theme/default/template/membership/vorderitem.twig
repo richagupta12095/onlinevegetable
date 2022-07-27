@@ -1,0 +1,83 @@
+{{ header }}
+<div id="product-category" class="container">
+   <div class="row">
+      {{ column_left }}
+      {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+      {% elseif column_left or column_right %}
+      {% set class = 'col-xs-12 col-sm-8 col-md-9 col-lg-9' %}
+      {% else %}
+      {% set class = 'col-sm-12' %}
+      {% endif %}
+      <div id="content" class="{{ class }}">
+         {{ content_top }}
+         <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+         </ul>
+         <h1 class="co-heading">Your order item is:</h1>
+         <div class="col-md-12">
+            <div class="row">
+        	<a href="javascript:history.back()" class="btn btn-default pull-right">Back</a>
+            <table class="table table-bordered table-hover" id="example">
+                  <thead>
+                    <tr>
+                     <td>Id#</td>
+                     <td>Product Name</td>
+                     <td>Weight</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% set i=1 %}
+                  {% if customers %}
+                  {% for customer in customers %}
+                  <tr>                   
+                    <td class="text-left">{{ i }}</td>
+                    <td class="text-left">{{ customer.model }}</td>
+                    <td class="text-left">{{ customer.weight_value }}</td>
+                    
+        			</td>
+
+                  </tr>
+                  {% set i=i+1 %}
+                  
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td class="text-center" colspan="8">{{ text_no_results }}</td>
+                  </tr>
+
+                  {% endif %}
+		          <tr><td></td><td><strong>Total:</strong></td><td><strong>{{wgt}}KG</strong></td></tr>
+                  </tbody>
+                </table>
+                <div class="row">
+              <div class="col-sm-6 text-left">{{ pagination }}</div>
+              <div class="col-sm-6 text-right">{{ results }}</div>
+            </div>
+
+
+
+            </div>
+         </div>
+         {{ content_bottom }}
+      </div>
+      {{ column_right }}
+   </div>
+</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable({
+         "paging":   false,
+         "ordering": false,
+         "info":     false,
+         "bFilter":false,
+         'searching':false,
+
+    });
+} );
+</script>
+{{ footer }}

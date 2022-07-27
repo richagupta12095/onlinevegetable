@@ -1,0 +1,23 @@
+<div class="ciblog-category ciblog-panel" id="ciblog-category{{ module }}">
+  <h3>{{ text_title }}</h3>
+  <ul class="list list-unstyled ciblog-list">
+    {% for category in categories %}
+      {% if category.ciblog_category_id == ciblog_category_id %}
+        <li><a href="{{ category.href }}" class="active"><i class="fa fa-angle-double-right"></i> {{ category.name }}</a></li>
+        {% if category.children %}
+          <ul class="list-unstyled ci-subcategory">
+            {% for child in category.children %}
+              {% if child.ciblog_category_id == child_id %}
+                <li><a href="{{ child.href }}" class="active">&nbsp;&nbsp;&nbsp;- {{ child.name }}</a></li>
+              {% else %}
+                <li><a href="{{ child.href }}">&nbsp;&nbsp;&nbsp;- {{ child.name }}</a></li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% else %}
+        <li><a href="{{ category.href }}"><i class="fa fa-angle-double-right"></i> {{ category.name }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

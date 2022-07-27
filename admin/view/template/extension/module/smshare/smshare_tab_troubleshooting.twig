@@ -1,0 +1,81 @@
+<div class="tab-pane" id="tab-troubleshooting">
+    <fieldset>
+        <legend>Troubleshooting</legend>
+
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="padding-top: 0" for="smshare_core_cfg_extension_status">Module status</label>
+            <div class="col-sm-9">
+                <div style="border: none; box-shadow: none;">
+
+                    <label style="margin-right: 11px;">
+                        <input style="vertical-align: top;" type="radio" name="smshare_core_cfg_extension_status"
+                               value="1" {{ smshare_core_cfg_extension_status ? 'checked' : '' }}
+                               id="smshare_core_cfg_extension_status"/>
+                        {{ text_yes }}
+                    </label>
+                    <label style="margin-right: 11px;">
+                        <input style="vertical-align: top;" type="radio" name="smshare_core_cfg_extension_status"
+                               value="0" {{ smshare_core_cfg_extension_status ? '' : 'checked' }} />
+                        {{ text_no }}
+                    </label>
+
+                </div>
+                <small>Opencart always shows the module as disabled in the extension list page even if it is enabled. Please ignore.</small>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="padding-top: 0" for="smshare_core_cfg_use_https">Use HTTPS</label>
+            <div class="col-sm-9">
+                <div style="border: none; box-shadow: none;">
+
+                    <label style="margin-right: 11px;">
+                        <input style="vertical-align: top;" type="radio" name="smshare_core_cfg_use_https"
+                               value="1" {{ smshare_core_cfg_use_https ? 'checked' : '' }}
+                               id="smshare_core_cfg_use_https"/>
+                        {{ text_yes }}
+                    </label>
+                    <label style="margin-right: 11px;">
+                        <input style="vertical-align: top;" type="radio" name="smshare_core_cfg_use_https"
+                               value="0" {{ smshare_core_cfg_use_https ? '' : 'checked' }} />
+                        {{ text_no }}
+                    </label>
+
+                </div>
+                <small>Use HTTPS to connect to smshare API.</small>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label" style="padding-top: 0"
+                   for="smshare_core_cfg_log">Enable logs:</label>
+            <div class="col-sm-9">
+                <div style="border: none; box-shadow: none;">
+
+                    <label style="margin-right: 11px;">
+                        <input style="vertical-align: top;" type="radio" name="smshare_core_cfg_log"
+                               value="1" {{ smshare_core_cfg_log ? 'checked' : '' }}
+                               id="smshare_core_cfg_log"/>
+                        {{ text_yes }}
+                    </label>
+                    <label style="margin-right: 11px;">
+                        <input style="vertical-align: top;" type="radio" name="smshare_core_cfg_log"
+                               value="0" {{ smshare_core_cfg_log ? '' : 'checked' }} />
+                        {{ text_no }}
+                    </label>
+
+                </div>
+                <small class="help-block">
+                    Verbose logs will be printed to the opencart log file.
+                    Useful when you need to figure out what is going on.
+                </small>
+            </div>
+        </div>
+
+    </fieldset>
+</div>

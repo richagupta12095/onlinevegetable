@@ -1,0 +1,799 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+<id>E Wallet</id>
+<version>1.0.0.0</version>
+<author>knotechsoft.com</author>
+<file name="catalog/language/*/extension/module/account.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[<?php]]></search>
+		<add><![CDATA[
+		$_['text_e_wallet'] = 'E Wallet';]]></add>
+	</operation>
+</file>
+<file name="catalog/controller/extension/module/account.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[$data['recurring'] = $this->url->link('account/recurring', '', true);]]></search>
+		<add><![CDATA[
+		$data['e_wallet_status'] = $this->config->get('e_wallet_status');
+		$data['text_e_wallet']   = ($this->config->get('e_wallet_title')?$this->config->get('e_wallet_title'):$this->language->get('text_e_wallet'));
+		$data['e_wallet']        = $this->url->link('account/e_wallet', '', true);
+		]]></add>
+	</operation>
+</file>
+<file name="catalog/view/theme/*/template/account/account.twig">
+	<operation error="skip">
+		<search position="before"><![CDATA[<li><a href="{{ address }}">]]></search>
+		<add><![CDATA[
+		{% if e_wallet_status %}
+			<li><a href="{{ e_wallet }}"> {{ text_e_wallet }}</a></li>
+		{% endif %}
+		]]></add>
+	</operation>
+</file>
+<file name="catalog/view/theme/*/template/extension/module/account.twig">
+	<operation error="skip">
+		<search position="after"><![CDATA[{{ text_password }}</a>]]></search>
+		<add><![CDATA[
+		{% if e_wallet_status %}
+			<a href="{{ e_wallet }}" class="list-group-item">{{ text_e_wallet }}</a>
+		{% endif %}
+		]]></add>
+	</operation>
+</file>
+<file name="catalog/language/*/account/account.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[<?php]]></search>
+		<add><![CDATA[
+		$_['text_e_wallet'] = 'E Wallet';]]></add>
+	</operation>
+</file>
+<file name="catalog/language/*/checkout/checkout.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[<?php]]></search>
+		<add><![CDATA[
+		$_['text_e_wallet_payment'] = 'Add Money';
+		$_['text_e_account']        = 'Account';
+		$_['text_payment']          = 'Payment Method';
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/controller/checkout/cart.php"> <!-- working now -->
+	<operation error="skip"> <!-- found -->
+		<search position="after"><![CDATA[public function add() {]]></search> 
+		<add><![CDATA[
+			if(isset($this->session->data['vouchers_key'])){
+				unset($this->session->data['vouchers'][$this->session->data['vouchers_key']]);
+				unset($this->session->data['vouchers_key']);
+			}
+		]]></add>
+	</operation>
+	<operation error="skip"> <!-- found -->
+		<search position="replace"><![CDATA[$data['vouchers'][] = array(]]></search>
+		<add><![CDATA[
+			$thumb = false;
+			if(isset($voucher['image']) && $voucher['image']){
+				$thumb = $voucher['image'];
+			}
+			$data['vouchers'][] = array(
+				'thumb' => $thumb,
+		]]></add>
+	</operation>
+	<!-- <operation error="skip"> found : but search commented so created new optretion after this
+		<search position="replace"><![CDATA[$data['checkout'] = $this->url->link('checkout/checkout', '', true);]]></search>
+		<add><![CDATA[
+			if(isset($this->session->data['vouchers_key']) AND $this->session->data['vouchers_key']=='e_wallet_vouchers'){
+				$data['checkout'] = $this->url->link('checkout/e_checkout', '', true);
+			}else{
+				$data['checkout'] = $this->url->link('checkout/checkout', '', true);
+			}
+		]]></add>
+	</operation> -->
+	<operation error="skip"> <!-- found -->
+		<search position="replace"><![CDATA[$data['checkout']   = '/checkout';]]></search>
+		<add><![CDATA[
+			if(isset($this->session->data['vouchers_key']) AND $this->session->data['vouchers_key']=='e_wallet_vouchers'){
+				$data['checkout'] = $this->url->link('checkout/e_checkout', '', true);
+			}else{
+				$data['checkout'] = $this->url->link('checkout/checkout', '', true);
+			}
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/view/theme/*/template/checkout/cart.twig">
+	<operation error="skip">
+		<search position="replace"><![CDATA[<td></td>]]></search>
+		<add><![CDATA[
+			{% if voucher.thumb is defined %}
+			<td>
+				<img src="{{ voucher.thumb }}" alt="{{ voucher.description }}" title="{{ voucher.description }}" class="img-thumbnail" />
+			</td>
+			{% endif %}
+		]]></add>
+	</operation>
+</file>
+<file name="catalog/controller/checkout/checkout.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[public function index() {]]></search>
+		<add><![CDATA[
+		unset($this->session->data['use_e_wallet']);
+		if(isset($this->session->data['vouchers_key']) && $this->session->data['vouchers_key']=='e_wallet_vouchers'){
+			$this->response->redirect($this->url->link('checkout/e_checkout', '', true));
+		}
+		]]></add>
+	</operation>
+</file>
+<file name="catalog/controller/account/account.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[$this->load->language('account/account');]]></search>
+		<add><![CDATA[
+		$data['e_wallet_status'] = $this->config->get('e_wallet_status');
+		$data['text_e_wallet'] = ($this->config->get('e_wallet_title')?$this->config->get('e_wallet_title'):$this->language->get('text_e_wallet'));
+		$data['e_wallet'] = $this->url->link('account/e_wallet', '', true);]]></add>
+	</operation>
+</file>
+<file name="catalog/controller/common/header.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[public function index() {]]></search>
+		<add><![CDATA[
+		$data['e_wallet_status'] = $this->config->get('e_wallet_status');
+		if($this->config->get('e_wallet_status')){
+			$this->load->model('tool/image');
+			$data['e_wallet_url']      = $this->url->link('account/e_wallet');
+			$data['e_wallet_icon_url'] = $this->model_tool_image->resize($this->config->get('e_wallet_icon'), 30,30);
+			$data['e_wallet_title']    = $this->config->get('e_wallet_title');
+			$this->load->model('account/e_wallet');
+			$balance = $this->model_account_e_wallet->getBalance();
+
+			if(isset($this->session->data['currency'])){
+				$config_currency =$this->session->data['currency'];
+			}else{
+				$config_currency =$this->config->get('config_currency');
+			}
+			$data['balance'] = $this->currency->format($balance,$config_currency);
+		}
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/view/theme/*/template/common/header.twig">
+	<!-- <operation error="skip"> found
+		<search position="before" index="1"><![CDATA[{{ cart }}]]></search>
+		<add><![CDATA[
+			{% if e_wallet_status %}
+			<div class="col-sm-2" style="padding: 0;text-align: center;">
+		      	<div style="max-width: 100%;z-index: 10;position: relative;display: inline-block;">
+		      		<a href="{{ e_wallet_url }}" style="display: flex;">
+			      		<div style="float: left;line-height: 42px;">
+			      			<img src="{{ e_wallet_icon_url }}" />
+			      		</div>
+			      		<div style="float: left;margin-left: 5px;line-height: 20px;text-align: left;">
+			      			<div style="font-size: 13px;">{{ e_wallet_title }}</div>
+		      				<div><b><span style="font-size: 14px;" >{{ balance }}</span></b></div>
+			      		</div>
+			      	</a>
+		      	</div>
+	        </div>
+	        {% endif %}
+	       ]]></add>
+	</operation> -->
+
+	<!-- <operation error="skip"> not found
+		<search position="replace"><![CDATA[<div class="col-sm-5">{{ search }}]]></search>
+		<add><![CDATA[
+			{% if e_wallet_status %}
+				<div class="col-sm-4">{{ search }}
+			{% else %}
+				<div class="col-sm-5">{{ search }}
+			{% endif %}
+		]]></add>
+	</operation> -->
+
+	<!-- <operation error="skip"> Opretion added
+		<search position="replace"><![CDATA[<div class="col-md-7 col-sm-6 col-xs-12">{{ search }}]]></search>
+		<add><![CDATA[
+			{% if e_wallet_status %}
+				<div class="col-md-5 col-sm-6 col-xs-12">{{ search }}
+			{% else %}
+				<div class="col-md-7 col-sm-6 col-xs-12">{{ search }}
+			{% endif %}
+		]]></add>
+	</operation> -->
+
+	<operation error="skip">
+		<search position="after"><![CDATA[<li><a href="{{ account }}">{{ text_account }}</a></li>]]></search>
+		<add><![CDATA[
+			<?php if($e_wallet_status){ ?>
+				<li><a href="{{ e_wallet_url }}">{{ e_wallet_title }}</a></li>
+			<?php } ?>
+		]]></add>
+	</operation>
+	<operation error="skip"> <!-- Opretion added becuse above opretion not searching right -->
+		<search position="after"><![CDATA[<li><a href="{{ account }}"><i class="fa fa-address-book-o"></i>{{ text_account }}</a></li>]]></search>
+		<add><![CDATA[
+			<?php if($e_wallet_status){ ?>
+				<li><a href="{{ e_wallet_url }}"><i class="fa fa-money"></i>{{ e_wallet_title }}</a></li>
+			<?php } ?>
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/view/theme/*/template/checkout/payment_method.twig"> <!-- working now -->
+	<operation error="log"> <!-- found -->
+		<search position="before"><![CDATA[{% if payment_methods %}]]></search>
+		<add position="before"><![CDATA[
+			{% if e_method and wallet_balance > 0 and not (check_wallet_voucher) %}
+
+			  <div class="form-group">
+			    <label for="use-e_wallet">Use {{ e_wallet_title }}</label>
+			    <input name="use_e_wallet" id="use-e_wallet" type="checkbox">
+			    <div class="use_e_wallet_text" style="display:none;">
+			      {% if remain_wallet_balance <= 0 %}
+			        <input type="radio" name="payment_method" id="e_wallet_payment_method" value="e_wallet_payment" style="display:none;"/>
+			      {% endif %}
+			      <p> &nbsp;  {{ wallettext }}</p>
+			    </div>
+			  </div>
+			  <script type="text/javascript">
+			    $('#use-e_wallet').change(function(){
+			      if($(this).prop('checked')){
+			        $('.use_e_wallet_text').show();
+			        $('#e_wallet_payment_method').prop('checked',true);
+			        if($('#e_wallet_payment_method').length){
+			          $('#collapse-payment-method .radio').hide();
+			        }
+			      }else{
+			        $('.use_e_wallet_text').hide();
+			        $('#e_wallet_payment_method').prop('checked',false);
+			        $('#collapse-payment-method .radio').show();
+			      }
+			    });
+			  </script>
+			{% endif %}
+
+		]]></add>
+	</operation>
+	<operation error="skip"> <!-- found -->
+		<search position="replace"><![CDATA[<p><strong>{{ text_comments }}</strong></p>]]></search>
+		<add><![CDATA[
+			{% if check_wallet_voucher %}
+			{% else %}
+				<p><strong>{{ text_comments }}</strong></p>
+			{% endif %}
+		]]></add>
+	</operation>
+	<operation error="skip"> <!-- found -->
+		<search position="replace"><![CDATA[<textarea name="comment" rows="8" class="form-control">{{ comment }}</textarea>]]></search>
+		<add><![CDATA[
+			{% if check_wallet_voucher %}
+				<textarea name="comment" rows="8" class="form-control" style="display:none">{{ comment }}</textarea>
+			{% else %}
+				<textarea name="comment" rows="8" class="form-control">{{ comment }}</textarea>
+			{% endif %}
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/controller/checkout/payment_method.php">
+	<operation error="skip">
+		<search position="before"><![CDATA[if ($this->config->get('config_checkout_id')) {]]></search>
+		<add><![CDATA[
+		if($this->config->get('payment_e_wallet_payment_status') && isset($this->request->post['use_e_wallet']) && $this->request->post['payment_method'] != 'e_wallet_payment'){
+			$this->session->data['use_e_wallet'] = true;
+		}]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="after"><![CDATA[$this->session->data['payment_methods'];]]></search>
+		<add><![CDATA[
+		if(isset($e_wallet_payment) && !empty($e_wallet_payment)){
+			$this->session->data['payment_methods'][$e_wallet_payment['code']]=$e_wallet_payment;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="before"><![CDATA[$this->session->data['payment_methods'] = $method_data;]]></search>
+		<add><![CDATA[
+			$data['e_method']=0;
+			if(isset($method_data['e_wallet_payment']) && (int)$data['wallet_balance'] > 0 && !$data['check_wallet_voucher']){
+				$e_wallet_payment = $method_data['e_wallet_payment'];
+				unset($method_data['e_wallet_payment']);
+				$data['e_method'] = 123;
+			}
+
+			if(isset($method_data['e_wallet_payment']) && (int)$data['wallet_balance'] <= 0){
+				unset($method_data['e_wallet_payment']);
+				$data['e_method'] = 123;
+			}
+
+			if($data['check_wallet_voucher']){
+				unset($method_data['e_wallet_payment']);
+				foreach($method_data as $payment_method){
+					if(!in_array($payment_method['code'],$data['e_wallet_payments'])){
+						unset($method_data[$payment_method['code']]);
+					}
+				}
+			}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="before"><![CDATA[$method_data = array();]]></search>
+		<add><![CDATA[
+			$data['wallet_balance'] = 0;
+			$data['check_wallet_voucher'] = false;
+			if($this->config->get('payment_e_wallet_payment_status')){
+				if(isset($this->session->data['vouchers_key']))
+					$data['check_wallet_voucher'] = isset($this->session->data['vouchers'][$this->session->data['vouchers_key']]);
+				$this->load->model('account/e_wallet');
+				$wallet_balance            = $this->model_account_e_wallet->getBalance();
+				$data['wallettext']        = '';
+				$data['wallet_total']      = $total;
+				$data['e_wallet_title']    = $this->config->get('e_wallet_title');
+				$data['e_wallet_payments'] = $this->config->get('e_wallet_payments');
+				if(!$data['e_wallet_payments']){
+					$data['e_wallet_payments']=array();
+				}
+				$data['wallet_balance'] = $wallet_balance;
+				$remain_balance = $total - $wallet_balance;
+				$data['remain_wallet_balance'] = $remain_balance;
+				if((int)$wallet_balance > 0 && (float)$total > (float)$wallet_balance){
+					if(isset($this->session->data['currency'])){
+						$config_currency =$this->session->data['currency'];
+					}else{
+						$config_currency =$this->config->get('config_currency');
+					}
+					$wallettext = "Payment to be made <b>".$this->currency->format($total,$config_currency).'</b>';
+					$wallettext .= " - ".$data['e_wallet_title'].' <b>'.$this->currency->format($wallet_balance,$config_currency).' </b>';
+					$wallettext .= " Select an option to pay balance <b>".$this->currency->format($remain_balance,$config_currency)."</b>.";
+					$data['wallettext'] = $wallettext;
+				}else if((int)$wallet_balance > 0 && (float)$total < (float)$wallet_balance){
+					$data['wallettext'] = "Awesome! You have sufficient balance in your ".$data['e_wallet_title'].'.';
+				}
+
+			}
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/model/checkout/order.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[$order_info = $this->getOrder($order_id);]]></search>
+		<add><![CDATA[
+
+		if($order_info && $this->config->get('e_wallet_status')){
+			if(isset($this->session->data['currency'])){
+				$config_currency =$this->session->data['currency'];
+			}else{
+				$config_currency =$this->config->get('config_currency');
+			}
+			$alls = array_merge($this->config->get('e_wallet_processing_status'),$this->config->get('e_wallet_complete_status'));
+			if ($this->config->get('e_wallet_status')){
+				if(!in_array($order_info['order_status_id'],$alls) && $order_status_id){
+					$this->load->model('account/order');
+					$vouchers = $this->model_account_order->getOrderVouchers($order_id);
+					if(count($vouchers) == 1){
+					 	$vouchers = $vouchers[0];
+					 	if($vouchers['to_name'] == 'e_wallet_vouchers'){
+							$this->load->model('account/e_wallet');
+							$amount = $order_info['total'];
+
+							if($order_info['currency_code'] != $this->config->get('config_currency'))
+								$amount = $this->currency->convert($amount,$order_info['currency_code'],$config_currency);
+							if(in_array($order_status_id,$this->config->get('e_wallet_complete_status'))){
+								if((float)$amount > 0){
+									$data = array(
+										'desc' => 'Add Money in '.$this->config->get('e_wallet_title').'. Amount : '.$this->currency->format($amount,$config_currency),
+										'amount' => $amount,
+										'customer_id' => $order_info['customer_id'],
+									);
+									$this->model_account_e_wallet->addtransaction($data);
+								}
+							}else{
+								$data = array(
+									'desc' => 'Add Money in '.$this->config->get('e_wallet_title').'. Amount : '.$this->currency->format($amount,$config_currency)." By Payment Method '".$order_info['payment_method']."'.",
+									'amount' => $amount,
+									'customer_id' => $order_info['customer_id'],
+								);
+								$this->model_account_e_wallet->addcod_request($data);
+							}
+							$this->deleteOrder($order_id);
+							return;
+						}
+					}
+				}
+			}
+			if ($this->config->get('payment_e_wallet_payment_status')){
+				if (!$order_info['order_status_id'] && in_array($order_status_id,$alls)){
+					if ($order_info['payment_code'] != 'e_wallet_payment'){
+						$per = DB_PREFIX;
+						$check_total = $this->db->query("SELECT order_id,value FROM  `{$per}order_total` WHERE  `order_id` = '{$order_id}' AND code = 'e_wallet_total'");
+						if($check_total->num_rows == 1){
+							$this->load->model('account/e_wallet');
+							$wallet_balance = $this->model_account_e_wallet->getBalance();
+							if((int)$wallet_balance > 0 && (int)$wallet_balance == abs($check_total->row['value'])){
+								$data = array(
+									'desc' => 'Paid for Order, Order Id is: #'.$order_id,
+									'amount' => -$wallet_balance,
+									'customer_id' => $order_info['customer_id'],
+								);
+								$this->model_account_e_wallet->addtransaction($data);
+							}else{
+								$order_status_id = $this->config->get("config_fraud_status_id");
+								if((int)$wallet_balance > 0){
+									$data = array(
+										'desc' => 'Paid for Order, Order Id is: #'.$order_id,
+										'amount' => -$wallet_balance,
+										'customer_id' => $order_info['customer_id'],
+									);
+									$this->model_account_e_wallet->addtransaction($data);
+								}
+							}
+						}
+					}
+				}
+			}
+			if($this->config->get('e_wallet_status') && $order_status_id == $this->config->get('e_wallet_refund_order_id') && $order_info['payment_code'] == 'e_wallet_payment'){
+				$this->load->model('account/e_wallet');
+				$amount = $order_info['total'];
+				if($order_info['currency_code'] != $this->config->get('config_currency')){
+					$amount = $this->currency->convert($amount,$order_info['currency_code'],$config_currency);
+				}
+				$d = array(
+					'customer_id' => $order_info['customer_id'],
+					'amount' => $amount,
+					'desc' => 'Refund Amount For Order, Order Id is: #'.$order_id,
+				);
+				$this->model_account_e_wallet->addtransaction($d);
+			}
+		}
+		]]></add>
+	</operation>
+</file>
+
+<file name="admin/controller/common/column_left.php">
+	<operation error="skip">
+		<search position="before"><![CDATA[$marketing = array();]]></search>
+		<add><![CDATA[
+			$e_wallet = array();
+			if ($this->user->hasPermission('access', 'e_wallet/e_wallet')) {
+				$e_wallet[] = array(
+					'name'	   => $this->language->get('e_wallet_transaction'),
+					'href'     =>  $this->url->link('e_wallet/e_wallet/transaction', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+			if ($this->user->hasPermission('access', 'e_wallet/e_wallet')) {
+				$e_wallet[] = array(
+					'name'	   =>$this->language->get('e_wallet_add_transaction'),
+					'href'     => $this->url->link('e_wallet/e_wallet/add', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+
+			if ($this->user->hasPermission('access', 'e_wallet/e_wallet')) {
+				$e_wallet[] = array(
+					'name'	   => $this->language->get('e_wallet_add_request'),
+					'href'     => $this->url->link('e_wallet/e_wallet/add_request', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+
+			if ($this->user->hasPermission('access', 'e_wallet/e_wallet')) {
+				$e_wallet[] = array(
+					'name'	   => $this->language->get('e_wallet_customers'),
+					'href'     => $this->url->link('e_wallet/e_wallet/customers', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+			if ($this->user->hasPermission('access', 'e_wallet/e_wallet')) {
+				$e_wallet[] = array(
+					'name'	   => $this->language->get('e_wallet_withdraw_req'),
+					'href'     => $this->url->link('e_wallet/e_wallet/withdraw_request', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()
+				);
+			}
+
+			if ($e_wallet) {
+				$data['menus'][] = array(
+					'id'       => 'e_wallet',
+					'icon'	   => 'fa-credit-card',
+					'name'	   => $this->language->get('e_wallet'),
+					'href'     => '',
+					'children' => $e_wallet
+				);
+			}
+		]]></add>
+	</operation>
+</file>
+<file name="admin/language/*/common/column_left.php">
+	<operation error="skip">
+		<search position="before"><![CDATA[$_['text_api']]]></search>
+		<add><![CDATA[
+		$_['e_wallet']                 = 'E Wallet';
+		$_['e_wallet_transaction']     = 'Transaction';
+		$_['e_wallet_add_transaction'] = 'Add Transaction';
+		$_['e_wallet_add_request']     = 'Add Money Requests';
+		$_['e_wallet_customers']       = 'Customers Balance';
+		$_['e_wallet_withdraw_req']    = 'Withdraw Requests';
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/language/en-gb/checkout/success.php">
+	<operation error="skip"> <!-- found -->
+		<search position="before"><![CDATA[$_['text_customer']]]></search>
+		<add><![CDATA[
+		$_['text_e_wallate']        = '<p>Your Add Money in "%s" has been successfully processed!</p><p>You can view your Add Money history by going to the <a href="%s">my account</a> page and by clicking on <a href="%s">history</a>.</p><p>Please direct any questions you have to the <a href="%s">store owner</a>.</p><p>Thanks for Add Money with us online!</p>';
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/controller/checkout/success.php"> <!-- working -->
+	<operation error="skip"> <!-- found -->
+		<search position="after"><![CDATA[public function index() {]]></search>
+		<add><![CDATA[
+
+		if(isset($this->session->data['e_msg']) && $this->session->data['e_msg'] && !isset($this->session->data['order_id'])){
+			unset($this->session->data['e_msg']);
+			$this->response->redirect($this->url->link('common/home', '', true));
+		}
+		$this->session->data['e_msg']=false;
+		]]></add>
+	</operation>
+	<operation error="skip"> <!-- found -->
+		<search position="after"><![CDATA[$this->cart->clear();]]></search>
+		<add><![CDATA[
+		$e_success=$this->db->query("SELECT order_id FROM ".DB_PREFIX."order WHERE order_id='".$this->session->data['order_id']."'")->num_rows;
+			if(!$e_success){
+				$this->session->data['e_msg']=true;
+			}
+		]]></add>
+	</operation>
+	<operation error="skip"> <!-- found -->
+		<search position="before"><![CDATA[$this->response->setOutput($this->load->view('common/success', $data));]]></search>
+		<add><![CDATA[
+		if($this->session->data['e_msg'] && $this->config->get('e_wallet_status')){
+			$data['breadcrumbs'] = array();
+
+			$data['breadcrumbs'][] = array(
+				'text' => $this->language->get('text_home'),
+				'href' => $this->url->link('common/home')
+			);
+
+			$data['breadcrumbs'][] = array(
+				'text' => "Account",
+				'href' => $this->url->link('account/account')
+			);
+
+			$data['breadcrumbs'][] = array(
+				'text' => $this->config->get("e_wallet_title"),
+				'href' => $this->url->link('account/e_wallet', '', true)
+			);
+
+			$data['breadcrumbs'][] = array(
+				'text' => $this->language->get('text_success'),
+				'href' => $this->url->link('checkout/success')
+			);
+			$data['heading_title'] = "Add Money Successfully";
+			$data['text_message'] = sprintf($this->language->get('text_e_wallate'), $this->config->get('e_wallet_title'), $this->url->link('account/account', '', true), $this->url->link('account/e_wallet', '', true), $this->url->link('information/contact'));
+		}
+		]]></add>
+	</operation>
+</file>
+
+<file name="admin/view/template/common/dashboard.twig">
+	<operation error="skip"> <!-- found -->
+		<search position="before" index="2"><![CDATA[<div class="row">]]></search>
+		<add><![CDATA[
+
+		{% if e_wallet_status %} {{ e_wallet }} {% endif %}
+		]]></add>
+	</operation>
+</file>
+
+<file name="admin/controller/common/dashboard.php">
+	<operation error="skip"> <!-- found -->
+		<search position="before"><![CDATA[$sort_order = array();]]></search>
+		<add><![CDATA[
+		$data['e_wallet_status']=$this->config->get('e_wallet_status');
+
+		if($data['e_wallet_status'])
+		$dashboards[] = array(
+			'code'       => 'e_wallet',
+			'width'      => '12',
+			'sort_order' => '5',
+			'output'     => $this->load->controller('extension/dashboard/e_wallet')
+		);
+		]]></add>
+	</operation>
+</file>
+
+<file name="admin/controller/sale/order.php"> <!-- working -->
+	<operation error="skip"> <!-- found -->
+		<search position="before"><![CDATA[$this->response->setOutput($this->load->view('sale/order_info', $data));]]></search>
+		<add><![CDATA[
+		$data['refund_id'] = $this->config->get("e_wallet_refund_order_id");
+		]]></add>
+	</operation>
+</file>
+
+<file name="admin/view/template/sale/order_info.twig"> <!-- working -->
+	<operation error="skip"> <!-- found -->
+		<search position="before"><![CDATA[$('textarea[name=\'comment\']').val('');]]></search>
+		<add><![CDATA[
+		if('{{ refund_id }}' &&  encodeURIComponent($('select[name=\'order_status_id\']').val()) == '{{ refund_id }}'){
+			  $.ajax({
+			    url: 'index.php?route=e_wallet/e_wallet/checkrefund&user_token={{ user_token }}&order_id={{ order_id }}&o_his='+encodeURIComponent($('select[name=\'order_status_id\']').val()),
+			    dataType: 'json',
+			    success: function(json) {
+			      if (json['success']) {
+			        $('#history').before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> For Add Refund E_wallet Amount To Customer <a href='+json['success']['link']+'> Click Here </a> <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+			       }
+			    },
+			  });
+			}
+		]]></add>
+	</operation>
+</file>
+
+<file name="catalog/controller/journal2/checkout.php">
+	<operation error="skip">
+		<search position="after"><![CDATA[public function index() {]]></search>
+		<add><![CDATA[
+			unset($this->session->data['use_e_wallet']);
+			if(isset($this->session->data['vouchers_key']) && $this->session->data['vouchers_key']=='e_wallet_vouchers'){
+				$this->response->redirect($this->url->link('checkout/e_checkout', '', true));
+			}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="before" index='1'><![CDATA[if ($this->config->get('config_checkout_id')) {]]></search>
+		<add><![CDATA[
+		if($this->config->get('payment_e_wallet_payment_status') && isset($this->request->post['use_e_wallet']) && $this->request->post['payment_method'] != 'e_wallet_payment'){
+			$this->session->data['use_e_wallet'] = true;
+		}]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="before"><![CDATA[if (!$this->data['payment_methods']) {]]></search>
+		<add><![CDATA[
+			$totals = array();
+			$taxes = $this->cart->getTaxes();
+			$total = 0;
+
+			// Because __call can not keep var references so we put them into an array.
+			$total_data = array(
+				'totals' => &$totals,
+				'taxes'  => &$taxes,
+				'total'  => &$total
+			);
+
+			$this->load->model('extension/extension');
+
+			$sort_order = array();
+
+			$results = $this->model_extension_extension->getExtensions('total');
+
+			foreach ($results as $key => $value) {
+				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+			}
+
+			array_multisort($sort_order, SORT_ASC, $results);
+
+			foreach ($results as $result) {
+				if ($this->config->get($result['code'] . '_status')) {
+					$this->load->model('total/' . $result['code']);
+
+					// We have to put the totals in an array so that they pass by reference.
+					$this->{'model_total_' . $result['code']}->getTotal($total_data);
+				}
+			}
+			$this->data['wallet_balance'] = 0;
+			$this->data['check_wallet_voucher'] = false;
+			if($this->config->get('payment_e_wallet_payment_status')){
+				if(isset($this->session->data['vouchers_key']))
+					$this->data['check_wallet_voucher'] = isset($this->session->data['vouchers'][$this->session->data['vouchers_key']]);
+				$this->load->model('account/e_wallet');
+				$wallet_balance = $this->model_account_e_wallet->getBalance();
+				$this->data['wallettext'] = '';
+				$this->data['wallet_total'] = $total;
+				$this->data['e_wallet_title'] = $this->config->get('e_wallet_title');
+				$this->data['e_wallet_payments'] = $this->config->get('e_wallet_payments');
+				$this->data['wallet_balance'] = $wallet_balance;
+				$remain_balance = $total - $wallet_balance;
+				$this->data['remain_wallet_balance'] = $remain_balance;
+				if((int)$wallet_balance > 0 && (float)$total > (float)$wallet_balance){
+					if(isset($this->session->data['currency'])){
+						$config_currency =$this->session->data['currency'];
+					}else{
+						$config_currency =$this->config->get('config_currency');
+					}
+					$wallettext = "Payment to be made <b>".$this->currency->format($total,$config_currency).'</b>';
+					$wallettext .= " - ".$this->data['e_wallet_title'].' <b>'.$this->currency->format($wallet_balance,$config_currency).' </b>';
+					$wallettext .= " Select an option to pay balance <b>".$this->currency->format($remain_balance,$config_currency)."</b>.";
+					$this->data['wallettext'] = $wallettext;
+				}else if((int)$wallet_balance > 0 && (float)$total < (float)$wallet_balance){
+					$this->data['wallettext'] = "Awesome! You have sufficient balance in your ".$this->data['e_wallet_title'].'.';
+				}
+			}
+
+		]]></add>
+	</operation>
+</file>
+<file name="catalog/view/theme/*/template/journal2/checkout/payment_methods.twig">
+	<operation error="skip">
+		<search position="before"><![CDATA[{% if payment_methods %}]]></search>
+		<add><![CDATA[
+			{% if check_wallet_voucher %}
+				{% unset(payment_methods.e_wallet_payment) %}
+					{% for payment_method in  payment_methods){
+					{% if(loop.index in e_wallet_payments %}
+					{% unset(payment_methods.loop.index) %}
+					{% endif %}
+					{% endfor %}
+			{% endif %}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="before"><![CDATA[{% for payment_method in payment_methods %}]]></search>
+		<add><![CDATA[
+			{% if payment_methods.e_wallet_payment is defined and wallet_balance > 0 and not check_wallet_voucher %}
+		  <div class="form-group">
+		    <label for="use-e_wallet">Use {{ e_wallet_title }}</label>
+		    <input name="use_e_wallet" id="use-e_wallet" type="checkbox">
+		    <div class="use_e_wallet_text" style="display:none;">
+		      {% if remain_wallet_balance <= 0 %}
+		        <input type="radio" name="payment_method" id="e_wallet_payment_method" value="e_wallet_payment" style="display:none;"/>
+		      {% endif %}
+		      <p> &nbsp; {{ wallettext }}</p>
+		    </div>
+		  </div>
+		  <script type="text/javascript">
+		    $('#use-e_wallet').change(function(){
+		      if($(this).prop('checked')){
+		        $('.use_e_wallet_text').show();
+		        $('.use_e_wallet_text p').show();
+		        $('#e_wallet_payment_method').prop('checked',true);
+		        if($('#e_wallet_payment_method').length){
+		          $('.checkout-payment-methods .radio').hide();
+		        }
+		      }else{
+		        $('.use_e_wallet_text').hide();
+		        $('#e_wallet_payment_method').prop('checked',false);
+		        $('.checkout-payment-methods .radio').show();
+		      }
+		    });
+		  </script>
+		  {% endif %}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="replace"><![CDATA[<p><strong>{{ text_comments }}</strong></p>]]></search>
+		<add><![CDATA[
+			{% if check_wallet_voucher %}
+			{% else %}
+				<p><strong>{{ text_comments }}</strong></p>
+			{% endif %}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search position="replace"><![CDATA[<textarea name="comment" rows="8" class="form-control"><?php echo $comment; ?></textarea>]]></search>
+		<add><![CDATA[
+			<?php if($check_wallet_voucher){ ?>
+				<textarea name="comment" rows="8" class="form-control" style="display:none"><?php echo $comment; ?></textarea>
+			<?php } else { ?>
+				<textarea name="comment" rows="8" class="form-control"><?php echo $comment; ?></textarea>
+			<?php } ?>
+		]]></add>
+	</operation>
+</file>
+<file name="catalog/view/theme/journal2/template/extension/module/account.twig">
+	<operation error="skip">
+		<search position="after"><![CDATA[{{ text_password }}</a>]]></search>
+		<add><![CDATA[
+			{% if e_wallet_status %}
+				<a href="{{ e_wallet }}" class="list-group-item">{{ text_e_wallet }}</a>
+			{% endif %}
+		]]></add>
+	</operation>
+</file>
+</modification>

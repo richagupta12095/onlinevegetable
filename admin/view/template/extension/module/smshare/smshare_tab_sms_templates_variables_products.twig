@@ -1,0 +1,127 @@
+<div class="panel panel-danger">
+    <div class="panel-heading" role="tab" id="headingTwo">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Product variables (shortcodes)
+            </a>
+        </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+        <div class="panel-body">
+
+            <p>
+                Because customer can purchase multiple products in the same order, special care has been taken to make it easy
+                for you to add the products details into the SMS.
+            </p>
+
+            <p>A product template must be exactly as follows:</p>
+            <p>
+                <code>{foreach_product output="variables|text" join="new_line|text"} </code>
+            </p>
+
+
+            <p>
+                <span class="label label-info">Example</span>
+                Assume that a customer purchased the following:
+
+            <ul>
+                <li>Product name: iPhone. Product model: 4G 256GB. Quantity 1</li>
+                <li>Product name: iPhone case. Product model: leather. Quantity 1</li>
+            </ul>
+
+            </p>
+
+
+            <div class='row'>
+                <div class="col-sm-7">
+                    Template Example
+                    <pre>
+The following products are shipped:
+<b>{foreach_product output="product_name : product_model  ×  product_qty" join="new_line"}</b>
+Thank you for shopping with us.
+</pre>
+                </div>
+
+                <div class="col-sm-4">
+                    Output
+                    <pre>
+The following products are shipped:
+<b>iPhone : 4G 256GB   ×  1</b>
+<b>iPhone case : leather  ×  1</b>
+Thank you for shopping with us.
+</pre>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <table class="table table-striped">
+            <caption>Here is the list of available variables that you can use in the output attribute</caption>
+            <thead>
+            <tr>
+                <th style="width: 150px;">Variable</th>
+                <th>Description</th>
+                <th class="text-center">Customer registration</th>
+                <th class="text-center">Marketing SMS</th>
+                <th class="text-center">Order create</th>
+                <th class="text-center">Order status update</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>product_name</td>
+                <td>Product name</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>product_model</td>
+                <td>Product model</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>product_qty</td>
+                <td>Product quantity</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>product_seo_url</td>
+                <td>Product SEO URL</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+
+            </tbody>
+        </table>
+
+
+        <div class="panel-footer">
+            <h3>Remarks:</h3>
+
+            <ul>
+                <li>
+                    The <code>new_line</code> keyword in the <code>join</code> attribute will be replaced by new line.
+                </li>
+                {%  if show_sms_product_loop_purchase_link %}
+                <li>
+                    Product variables is an advanced feature (EXTRA). See: <a href="https://www.prowebtec.com/sms-product-loop-template" target="_blank">www.prowebtec.com/sms-product-loop-template</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+</div>

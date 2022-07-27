@@ -1,0 +1,143 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+      </div>
+        
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error['error_warning'] is defined) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error['error_warning'] }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+    {% if (success) %} 
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit_audit }}</h3>
+      </div>
+      <div class="panel-body">
+          <div class="well">
+              <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="control-label" for="log_entry">{{ text_filter_log_entry }}</label>
+                      <input type="text" name="filter_log_entry" value="{{ filter_log_entry }}" placeholder="{{ text_filter_log_entry }}" id="log_entry" class="form-control" />
+                      
+                    </div>
+                  </div>
+                  
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <label class="control-label" for="log_class_method">{{ text_filter_log_class_method }}</label>
+                      <input type="text" name="filter_log_class_method" value="{{ filter_log_class_method }}" placeholder="{{ text_filter_log_class_method }}" id="log_class_method" class="form-control" />
+                      
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                      <div class="form-group">
+                          <br>
+                      <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+                      <button type="button" id="button-refresh" class="btn btn-default pull-right" style="margin-right: 2px;"><i class="fa fa-refresh"></i> {{ button_reset }}</button>&nbsp;
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-product">
+              <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-left">{% if (sort == 'id_gs_audit_log') %} 
+                    <a href="{{ sort_id_etsy_audit_log }}" class="{{ strtolower(order) }}">{{ column_log_id }}</a>
+                    {% else %} 
+                    <a href="{{ sort_id_etsy_audit_log }}">{{ column_log_id }}</a>
+                    {% endif %}</td>
+                  <td class="text-left">{% if (sort == 'log_entry') %} 
+                    <a href="{{ sort_log_entry }}" class="{{ strtolower(order) }}">{{ column_log_description }}</a>
+                    {% else %} 
+                    <a href="{{ sort_log_entry }}">{{ column_log_description }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{% if (sort == 'log_user') %} 
+                    <a href="{{ sort_log_user }}" class="{{ strtolower(order) }}">{{ column_action_user }}</a>
+                    {% else %} 
+                    <a href="{{ sort_log_user }}">{{ column_action_user }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{% if (sort == 'log_class_method') %} 
+                    <a href="{{ sort_log_class_method }}" class="{{ strtolower(order) }}">{{ column_action_called }}</a>
+                    {% else %} 
+                    <a href="{{ sort_log_class_method }}">{{ column_action_called }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{% if (sort == 'log_time') %} 
+                    <a href="{{ sort_log_time }}" class="{{ strtolower(order) }}">{{ column_time_action }}</a>
+                    {% else %} 
+                    <a href="{{ sort_log_time }}">{{ column_time_action }}</a>
+                    {% endif %}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if (audit_log is defined) %} 
+                {% for log in audit_log %} 
+                <tr>
+                  <td class="text-left">{{ log['id_gs_audit_log'] }}</td>
+                  <td class="text-left">{{ log['log_entry'] }}</td>
+                  <td class="text-left">{{ log['log_user'] }}</td>
+                  <td class="text-left">{{ log['log_class_method'] }}</td>
+                  <td class="text-left">{{ log['log_time'] }}</td>
+                </tr>
+                {% endfor %} 
+                {% else %} 
+                <tr>
+                  <td class="text-center" colspan="9">{{ text_no_results }}</td>
+                </tr>
+                {% endif %} 
+              </tbody>
+            </table>
+          </div>
+          </form>
+          <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	var url = 'index.php?route=extension/module/googleshopping/auditLog&token={{ token }}';
+
+	var filter_log_entry = $('input[name=\'filter_log_entry\']').val();
+
+	if (filter_log_entry) {
+		url += '&filter_log_entry=' + encodeURIComponent(filter_log_entry);
+	}
+
+	var filter_log_class_method = $('input[name=\'filter_log_class_method\']').val();
+
+	if (filter_log_class_method) {
+		url += '&filter_log_class_method=' + encodeURIComponent(filter_log_class_method);
+	}
+
+	location = url;
+});
+
+$('#button-refresh').click(function(e){
+    var url = 'index.php?route=extension/module/googleshopping/auditLog&token={{ token }}';
+            location = url;        
+    });
+//--></script>
+{{ footer }}

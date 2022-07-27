@@ -1,0 +1,94 @@
+{{ header }}
+<div id="product-category" class="container">
+   <div class="row">
+      {{ column_left }}
+      {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+      {% elseif column_left or column_right %}
+      {% set class = 'col-xs-12 col-sm-8 col-md-9 col-lg-9' %}
+      {% else %}
+      {% set class = 'col-sm-12' %}
+      {% endif %}
+      <div id="content" class="{{ class }}">
+         {{ content_top }}
+         <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+         </ul>
+         <h1 class="co-heading">Your order is:</h1>
+         <div class="col-md-12">
+            <div class="row">
+             <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> You have already place order this week!</div>
+           
+             {% if edit_link %}
+               <br/><br/> <br/>
+              <a href="{{edit_link}}" class="btn btn-primary pull-right">Edit Order</a>
+               <br/>  <br/>
+             {% endif %}
+            <table class="table table-bordered table-hover" id="example">
+                  <thead>
+                    <tr>
+                     <td>Order Id#</td>
+                     <td>Delivery Day</td>
+                     <td>Time Slot</td>
+                     
+                     <!--<td>Total Weight(KG)</td>-->
+                     <td>Created Date</td>                     
+                     <td>View Order</td>                     
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% set i=0 %}
+                  {% if customers %}
+                  {% for customer in customers %}
+                  <tr>                   
+                    <td class="text-left">{{ customer.veg_order_id }}</td>
+                    <td class="text-left">{{ customer.dname }}</td>
+                    <td class="text-left">{{ customer.slotname }}</td>
+
+                    <!--<td class="text-left">{{ customer.totalweight }}</td>-->
+                    <td class="text-left">{{ customer.date_added }}</td>
+                    <td class="text-left"><a href="{{customer.view_link}}" type="a" value="theme" data-toggle="tooltip" title="" class="btn btn-warning" data-original-title="View order"><i class="fa fa-first-order"></i></a></td>
+
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td class="text-center" colspan="8">{{ text_no_results }}</td>
+                  </tr>
+
+                  {% endif %}
+              
+
+                  </tbody>
+                </table>
+                <div class="row">
+              <div class="col-sm-6 text-left">{{ pagination }}</div>
+              <div class="col-sm-6 text-right">{{ results }}</div>
+            </div>
+
+
+
+            </div>
+         </div>
+         {{ content_bottom }}
+      </div>
+      {{ column_right }}
+   </div>
+</div>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.22/datatables.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable({
+         "paging":   false,
+         "ordering": false,
+         "info":     false,
+         "bFilter":false,
+         'searching':false,
+
+    });
+} );
+</script>
+{{ footer }}

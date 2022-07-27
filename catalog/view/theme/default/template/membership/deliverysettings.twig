@@ -1,0 +1,130 @@
+{{ header }}
+<div id="product-category" class="container">
+   <div class="row">
+      {{ column_left }}
+      {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+      {% elseif column_left or column_right %}
+      {% set class = 'col-xs-12 col-sm-8 col-md-9 col-lg-9' %}
+      {% else %}
+      {% set class = 'col-sm-12' %}
+      {% endif %}
+      <div id="content" class="{{ class }}">
+         {{ content_top }}
+         <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+            {% endfor %}
+         </ul>
+         <h1 class="co-heading">Choose Delivery - Day</h1>
+         <div class="col-md-12">
+        
+             <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-membership" class="form-horizontal">
+              <div class="table-responsive">
+                 <table id="myTable" class="table table-bordered">
+                    <thead style="background: #eee;">
+                       <tr>
+                          <th>Id</th>
+                          <th>Delivery - Day</th>
+                          <th>Action</th>
+                      
+                          
+                       </tr>
+                    </thead>
+                    <tbody>
+                        {% if setting %}
+                        {% for item in setting %}
+                        <tr id="row_{{product.product_id}}">
+                        
+                            <td class="text-left">{{loop.index}}</td>
+                            <td class="text-left">{{item.name}}</td>
+
+                            <td class="text-left"> 
+                              {% if item.checked %}
+                              <input type="checkbox" name="dday[]" id="dday" value="{{item.id}}" class="custom-control-input"  checked="checked">
+                               {% else %}
+                                <input type="checkbox" name="dday[]" id="dday" value="{{item.id}}" class="custom-control-input"  >
+                               {% endif %}
+                             </td>
+                         </tr>
+                          {% endfor %}
+                         {% endif %}
+                    </tbody>
+                 </table>
+              </div>
+            </form>
+            <div class="row">
+              <div class="buttons">
+              <div class="pull-right"><a  class="btn btn-primary  btn-save pos-demo">Next <i class="fa fa-next"></i></a></div>
+              </div>
+            </div>
+         </div>
+         {{ content_bottom }}
+      </div>
+      {{ column_right }}
+   </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready( function () {
+    $('.btn-save').on('click',function(){
+      var chkbox = $('input:checkbox:checked').length;
+      if(chkbox===0){
+          $(".pos-demo").notify(
+          "Please select at least two days", 
+          { position:"right" }
+          );
+        return false;
+      }
+      if(chkbox>2){
+         $(".pos-demo").notify(
+          "You can not select more than two", 
+          { position:"right" }
+          );
+        return false;
+      }
+    $.ajax({
+      url: 'index.php?route=account/deliverysettings/add',
+      type: 'post',
+      data: $('#form-membership').serialize(),
+      dataType: 'json',
+      beforeSend: function() {
+        $('#form-membership > button').button('loading');
+      },
+      complete: function() {
+        $('#form-membership > button').button('reset');
+      },
+      success: function(json) {
+         if(json.error=='success'){
+              $(".pos-demo").notify(
+              "Your delivery days save successfully.", 
+              "success",
+              { position:"right" }
+            );
+            setTimeout(function() {  location=json.redirect; },1000);
+           
+
+         }else if(json.error=='data_issue'){
+             $(".pos-demo").notify(
+              "We got some error, Please try again.", 
+              "success",
+              { position:"right" }
+            );
+         }else{
+           location.reload();
+         }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+
+        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+
+      }
+
+     });
+      
+    })
+
+});
+
+</script>
+{{ footer }}

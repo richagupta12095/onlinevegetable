@@ -1,0 +1,14 @@
+{% for blogpost in blogposts %}
+<div class="post-container row">
+  <a href="{{ blogpost.href }}">
+    <div class="post-image col-sm-4">
+     <img src="{{ blogpost.thumb }}" alt="{{ blogpost.name }}" title="{{ blogpost.name }}" class="img-responsive" />
+    </div>
+    <div class="post-caption col-sm-8">
+      <h4>{{ blogpost.name }}</h4>
+      {# <p>{{ blogpost.description }}</p> #}
+    </div>
+    <div class="clearfix"></div>
+  </a>
+</div>
+{% endfor %}

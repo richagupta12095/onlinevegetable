@@ -1,0 +1,329 @@
+<div class="panel panel-info">
+    <div class="panel-heading" role="tab" id="headingVarGen">
+        <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseVarGen" aria-expanded="true" aria-controls="collapseVarGen">
+                Available variables (shortcodes)
+            </a>
+        </h4>
+    </div>
+    <div id="collapseVarGen" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingVarGen">
+        <div class="panel-body">
+            <p>You will be using predefined "variables" which are place-holders that will be replaced by the real information at runtime.</p>
+            <p>
+                <span class="label label-info">Example</span> If you enter the following:
+            </p>
+            <pre>Dear <b>{firstname}</b>, Thank you for your order at mystore.com order ID <b>{order_id}</b> amount <b>{total}</b></pre>
+            <p>
+                The next time a customer makes an order (let's say <b>Bérénice</b>), she will receive a SMS containing the following:
+            </p>
+            <pre>Dear <b>Bérénice</b>, Thank you for your order at mystore.com order ID <b>1234</b> amount <b>$12.34</b></pre>
+
+        </div>
+
+        <table class="table table-striped">
+            <caption>Here is the list of available variables and their context (where to use).</caption>
+            <thead>
+            <tr>
+                <th style="width: 150px;">Variable</th>
+                <th>Description</th>
+                <th class="text-center">Customer registration</th>
+                <th class="text-center">Marketing SMS</th>
+                <th class="text-center">Order create</th>
+                <th class="text-center">Order status update</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{firstname}</td>
+                <td>First name</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{lastname}</td>
+                <td>Last name</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{phonenumber}</td>
+                <td>Phone number</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{email}</td>
+                <td>Email</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{password}</td>
+                <td>Password</td>
+                <td class="text-center"><small class="text-warning"><i class="fa fa-asterisk"></i></small>[1]</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+            </tr>
+            <tr>
+                <td>{store_url}</td>
+                <td>Store URL</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{order_id}</td>
+                <td>Order ID</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{total}</td>
+                <td>Total</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{total_no_currency}</td>
+                <td>Total without currency symbol</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{order_status}</td>
+                <td>Order status</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{date_added}</td>
+                <td>Date added</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_company}</td>
+                <td>Shipping address company</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_address_1}</td>
+                <td>Shipping address 1</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_address_2}</td>
+                <td>Shipping address 2</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_postcode}</td>
+                <td>Shipping address postcode</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_city}</td>
+                <td>Shipping address city</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_region}</td>
+                <td>Shipping address region</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_country}</td>
+                <td>Shipping address country</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_company}</td>
+                <td>Payment address company</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_address_1}</td>
+                <td>Payment address 1</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_address_2}</td>
+                <td>Payment address 2</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_postcode}</td>
+                <td>Payment address postcode</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_city}</td>
+                <td>Payment address city</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_region}</td>
+                <td>Payment address region</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_country}</td>
+                <td>Payment address country</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{payment_method}</td>
+                <td>Payment method</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{shipping_method}</td>
+                <td>Shipping method</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{default_template}</td>
+                <td>Contains almost the same information as the Opencart default email sent when you update order status</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{comment}</td>
+                <td>The comment you write when you update order status</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center">✔</td>
+            </tr>
+            <tr>
+                <td>{tracking_code}</td>
+                <td>The tracking number you enter when you update order status</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"><small class="text-warning"><i class="fa fa-asterisk"></i></small>[2]</td>
+            </tr>
+            <tr>
+                <td>{tracking_company}</td>
+                <td>The name of the selected tracking company when you update order status.</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"><small class="text-warning"><i class="fa fa-asterisk"></i></small>[2]</td>
+            </tr>
+            <tr>
+                <td>{tracking_url}</td>
+                <td>The URL to the tracking page.</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"><small class="text-warning"><i class="fa fa-asterisk"></i></small>[2]</td>
+            </tr>
+            <tr>
+                <td>{tracking_url_short}</td>
+                <td>The shortened URL to the tracking page (<a href="https://goo.gl" target="_blank">goo.gl</a> URL shortening service)</td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"></td>
+                <td class="text-center"><small class="text-warning"><i class="fa fa-asterisk"></i></small>[2][3]</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="panel-footer">
+            <h3>Remarks:</h3>
+
+            <ul>
+                <li>
+                    <small class="text-warning"><i class="fa fa-asterisk"></i></small>
+                    [1] Password variable works for SMS sent on registration. However, if you have installed the
+                    <a href="https://www.prowebtec.com/pva">PVA extension (Phone Verified Accounts by SMS at registration)</a>,
+                    SMS at registration will be delayed and sent only when customer verifies his phone number. Pay attention to the password variable because it will not be available at this
+                    time. This is because Opencart doesn't store password in clear in the database. In fact, password are hashed. If you use it, customer will see the useless hashed password.
+                    If this is an issue for you, contact us.
+                </li>
+                <li>
+                    <small class="text-warning"><i class="fa fa-asterisk"></i></small>
+                    [2] Requires the <a href="https://www.prowebtec.com/powertrack" target="_blank">Powertrack</a> module,
+                    as well as the <a href="https://www.prowebtec.com/powertrack-fusion-smshare" target="_blank">powertrack-fusion-smshare</a> integration.
+                </li>
+                <li>
+                    <small class="text-warning"><i class="fa fa-asterisk"></i></small>
+                    [3] Requires the <a href="https://www.prowebtec.com/powertrack-short-url" target="_blank">Powertrack URL shortening advanced feature.</a>
+                </li>
+            </ul>
+        </div>
+
+
+    </div>
+</div>

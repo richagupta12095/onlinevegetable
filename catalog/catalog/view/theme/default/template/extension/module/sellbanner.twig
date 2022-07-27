@@ -1,0 +1,16 @@
+<div class="sellbanner col-xs-12">
+	<div class="row">
+			{% for banner in banners %}
+				<div class="col-xs-12 b-effect-p">
+				<div class="img-effect-p">
+				  {% if banner.link %}
+				  	<a href="{{ banner.link }}">
+				  		<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive center-block" />
+				  	</a>
+				  {% else %}
+				  	<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive center-block" />{% endif %}
+				</div>
+		    </div>
+			  {% endfor %}
+	</div>
+</div>

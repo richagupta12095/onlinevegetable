@@ -1,0 +1,223 @@
+
+{{ header }}
+<div id="container" class="container j-container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="">{% if custom_themename != 'journal2' %}<div class="">{% endif %}
+ 
+    {% if custom_themename == 'journal2' %}
+   
+    {% endif %}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-12' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="">{{ content_top }}
+      <!--<h1>{{ heading_title }}</h1>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+      <div class="">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            <li data-target="#myCarousel" data-slide-to="3"></li>
+          </ol>
+      
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            <div class="item active">
+              <img src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---3gold----8-Jan'21.jpg" alt="Los Angeles" style="width:100%;">
+            </div>
+      
+            <div class="item">
+              <img src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---4diamond---8-Jan'.jpg" alt="Chicago" style="width:100%;">
+            </div>
+          
+            <div class="item">
+              <img src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado--5PLATINUM--8-Jan'2.jpg" alt="New york" style="width:100%;">
+            </div>
+
+            <div class="item">
+              <img src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---A-Banner--8-Jan'.jpg" alt="New york" style="width:100%;">
+            </div>
+          </div>
+      
+          <!-- Left and right controls -->
+          <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      
+      <div class="membership_content_cols" id="membership_content">
+        {% if sub_title %}
+        <div class="memberheading ">
+          <span>{{ sub_title }}</span>
+        </div>
+        {% endif %}
+        {{ top_description }}
+        <div class="prcing_table ">
+          <div class="table_titles clearfix hide">
+            <div class="table_cols_one title_text">{{ column_plan }}</div>
+            <div class="table_cols_two title_text2 hidden-xs">{{ column_feature }}</div>
+          </div>
+          <div class="row">
+          {% for mpplan in mpplans %}
+            <div class="col-sm-4 col-md-4 col-xs-12">
+              <div class="pricing_content green clearfix" id="pricingcontent-{{ mpplan.mpplan_id }}">
+                <div class="table_cols_one">
+                  <div class="plan_name plan_name{{ mpplan.mpplan_id }}">{{ mpplan.name }}</div>
+                  <h3 class="xs-price">{{ mpplan.price }}</h3>
+                  <div class="plan_time plan_time{{ mpplan.mpplan_id }}">{{ text_duration }} {{ mpplan.duration }}</div>
+                </div>  
+                <div class="table_cols_two plan_detail">
+                  <ul class="list-unstyled">
+                    {% if mpplan.informations %}
+                    {% for information in mpplan.informations %}
+                      <li><label>{{ information.name }}</label></li>
+                    {% endfor %}
+                    {% endif %}
+                  </ul>
+                  <div class="plan_price">
+                    <a href="{{ mpplan.href }}" class="plan_view">{{ button_details }} & Buy</a>
+                    <!--<button class="plan_buy plan_buy{{ mpplan.mpplan_id }} btn" rel="{{ mpplan.mpplan_id }}" onclick="MPMEMBERSHIP.add('{{ product_id }}','{{ mpplan.mpplan_id }}')">{{ button_buy }}</button>-->
+                  </div>
+                </div>
+              </div>
+            </div>          
+            <style type="text/css">
+              .membership_content .pricing_content .plan_name{{ mpplan.mpplan_id }} {
+                {% set style_one = '' %}
+                {% if mpplan.first_textcolor %}
+                {% set style_one = 'color: ' ~ mpplan.first_textcolor ~ ';' %}
+                {% endif %}
+                {{ style_one }}
+              }
+
+              .membership_content .pricing_content .plan_time{{ mpplan.mpplan_id }} {
+                {% set style_two = '' %}
+                {% if mpplan.second_textcolor %}
+                  {% set style_two = 'color: ' ~ mpplan.second_textcolor ~ ';' %}
+                {% endif %} 
+                {{ style_two }}
+              }
+
+              #pricingcontent-{{ mpplan.mpplan_id }} .table_cols_one{
+                {% set style_one = '' %}
+                {% if mpplan.first_bgcolor %}
+                  {% set style_one = mpplan.first_bgcolor %}
+                {% endif %}
+                {% set style_two = '' %}
+                {% if mpplan.second_bgcolor %}
+                  {% set style_two =  mpplan.second_bgcolor %}
+                {% endif %}
+                background: {{ style_one }};
+              }
+
+              #pricingcontent-{{ mpplan.mpplan_id }} .table_cols_two{
+                {% set style_one = '' %}
+                {% if mpplan.first_bgcolor %}
+                  {% set style_one = mpplan.first_bgcolor %}
+                {% endif %}
+                {% set style_two = '' %}
+                {% if mpplan.second_bgcolor %}
+                  {% set style_two =  mpplan.second_bgcolor %}
+                {% endif %}
+                background: {{ style_two }};
+              }
+
+              {% if mpplan.second_textcolor %}
+              #pricingcontent-{{ mpplan.mpplan_id }} .table_cols_two label {
+                color: {{ mpplan.second_textcolor }};
+              }
+              {% endif %}
+
+              {% if mpplan.first_bgcolor %}
+              #pricingcontent-{{ mpplan.mpplan_id }} .table_cols_one::after{
+                color: {{ mpplan.first_bgcolor }};
+              }
+              {% endif %}
+
+              {% if mpplan.second_textcolor %}
+              #pricingcontent-{{ mpplan.mpplan_id }} .plan_view{
+                color: {{ mpplan.second_textcolor }};
+                border-color: {{ mpplan.second_textcolor }};
+              }
+              {% endif %}
+
+              {% if mpplan.first_bgcolor or mpplan.first_textcolor %}
+              #pricingcontent-{{ mpplan.mpplan_id }} .plan_buy{
+                {% if mpplan.first_bgcolor %}
+                background: {{ mpplan.first_bgcolor }};
+                border-color: {{ mpplan.first_bgcolor }};
+                {% endif %}
+
+                {% if mpplan.first_textcolor %}
+                color: {{ mpplan.first_textcolor }};
+                {% endif %}
+              }
+              {% endif %}
+            </style>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+      {{ bottom_description }}
+      {{ content_bottom }}
+      <div class="">
+        
+        <form action="https://iavocado.in/index.php?route=membership/prices/subscribe" method="post" class="form-horizontal">
+		<div class="row">
+		<div class="col-md-4 col-sm-4 col-xs-12">
+       <div class="form-group">
+            <label class="col-lg-12 control-label" for="email">Name</label>
+          <div class="col-lg-12"><input type="text" name="name" placeholder="Enter Name"  class="form-control" required></div>
+        </div>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-12">
+       <div class="form-group">
+           <label class="col-lg-12 control-label" for="email">Phone</label>
+          <div class="col-lg-12"><input type="tel" name="phone" placeholder="Enter mobile"  class="form-control" required maxlength='10'> </div>
+        </div>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-12">
+         <div class="form-group">
+            <label class="col-lg-12 control-label" for="email">Email</label>
+          <div class="col-lg-12"><input type="email" name="email" placeholder="Enter email"  class="form-control" required></div>
+        </div>
+		</div> 
+      
+		
+		<div class="col-md-12 col-sm-12 col-xs-12">
+		 <div class="buttons clearfix">
+          <div class="pull-left">
+		  <input type="submit" name="submit" value="Subscribe" class="btn add-to-cart btn-primary">
+		  </div>
+          </div>
+        </div>
+		
+		
+</div>
+      </form>
+     
+      </div>
+    </div>
+    {% if custom_themename != 'journal2' %}{{ column_right }}{% endif %}
+  {% if custom_themename != 'journal2' %}</div>{% endif %}
+</div></div>
+{{ footer }}

@@ -1,0 +1,111 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right"><a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-transaction').submit() : false;"><i class="fa fa-trash-o"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-inline" action="{{ formurl }}" method="post">
+              <div class="form-group">
+                <label for="datefrom">From Date</label>
+                <input type="text" class="form-control date" value="{{ datefrom }}" name="datefrom" id="datefrom">
+              </div>
+              <div class="form-group">
+                <label for="dateto">TO</label>
+                <input type="text" class="form-control date" value="{{ dateto }}" name="dateto" id="dateto">
+              </div>
+              <div class="form-group">
+                <label for="dateto"> &nbsp; Email / Phone</label>
+                <input type="text" class="form-control" value="{{ email }}" name="email">
+              </div> &nbsp; 
+              <button type="submit" class="btn btn-default">Filter</button>
+            </form>
+            <br>
+          </div>
+        </div>
+        <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-transaction">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                  <td class="text-right">{{ column_customer }}</td>
+                  <td class="text-right">{{ column_description }}</td>
+                  <td class="text-right">{{ column_price }}</td>
+                  <td class="text-right">{{ column_date }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% set total = 0 %}
+                {% if transactions %}
+                {% for transaction in transactions %}
+                {% set total = total + transaction.o_price %}                  
+                <tr>
+                  <td class="text-center">{% if selected in transaction.transaction_id %}
+                    <input type="checkbox" name="selected[]" value="{{ transaction.transaction_id }}" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" name="selected[]" value="{{ transaction.transaction_id }}" />
+                    {% endif %}
+                  </td>
+                  <td class="text-left"><a href="{{ transaction.c_link }}">{{ transaction.customer }}</a></td>
+                  <td class="text-left">{{ transaction.description }}</td>
+                  <td class="text-right">{{ transaction.price }}</td>
+                  <td class="text-right">{{ transaction.date }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="4">{{ text_no_results }}</td>
+                </tr>
+                {% endif %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="3">Total</th>
+                  <th>{{ total }}</th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $('.date').datetimepicker({
+    pickTime: false
+  });
+</script>
+{{ footer }}

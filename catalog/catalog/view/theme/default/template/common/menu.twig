@@ -1,0 +1,58 @@
+<div class="hidden-md hidden-lg hidden-sm">
+{% if categories %}
+<div class="container horizontal-menu">
+  <nav id="menu" class="navbar">
+
+    <div class="navbar-header"><!-- <span id="category" class="visible-xs">{{ text_category }}</span> -->
+      <button type="button" class="btn btn-navbar navbar-toggle" onclick="openNav()" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fa fa-bars"></i></button>
+    </div>
+
+<div id="mySidenav" class="sidenav">
+ <div class="close-nav">
+                <span class="categories">Menu</span>
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="fa fa-close"></i></a>
+            </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about-us">About Us</a></li>
+        {% for category in categories %}
+        {% if category.children %}
+        <li class="dropdown"><a href="{{ category.href }}" class="dropdown-toggle header-menu" data-toggle="dropdown">{{ category.name }}<i class="fa fa-angle-down pull-right"></i></a>
+          <div class="dropdown-menu">
+            <div class="dropdown-inner"> {% for children in category.children|batch(category.children|length / category.column|round(1, 'ceil')) %}
+              <ul class="list-unstyled">
+                {% for child in children %}
+                <li><a href="{{ child.href }}">{{ child.name }}</a></li>
+                {% endfor %}
+              </ul>
+              {% endfor %}</div>
+            <a href="{{ category.href }}" class="see-all">{{ text_all }} {{ category.name }}</a> </div>
+        </li>
+        {% else %}
+        <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </nav>
+</div>
+</div>
+{% endif %}
+</div>
+
+<script type="text/javascript">
+ function headermenu() {
+     if (jQuery(window).width() < 992)
+     {
+         jQuery('ul.nav li.dropdown a.header-menu').attr("data-toggle","dropdown");        
+     }
+     else
+     {
+         jQuery('ul.nav li.dropdown a.header-menu').attr("data-toggle",""); 
+     }
+}
+$(document).ready(function(){headermenu();});
+jQuery(window).resize(function() {headermenu();});
+jQuery(window).scroll(function() {headermenu();});
+</script>

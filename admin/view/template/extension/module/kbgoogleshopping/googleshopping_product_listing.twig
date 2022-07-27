@@ -1,0 +1,332 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <a form="form-product" formaction="{{ enable_action }}" data-toggle="tooltip" title="{{ button_enable_products }}" class="btn btn-primary formaction"><i style="padding: 0 2px" class="fa fa-step-forward"></i></a>
+                <a form="form-product" formaction="{{ disable_action }}" data-toggle="tooltip" title="{{ button_disable_products }}" class="btn btn-primary formaction"><i class="fa fa-ban"></i></a>
+                <a href="{{ local_sync_link }}" title="{{ text_local_sync }}" data-toggle="tooltip" target="_blank" title="" class="btn btn-warning"><i class="fa fa-refresh"></i></a>
+                <a href="{{ feed_sync_link }}" title="{{ text_feed_sync }}" data-toggle="tooltip" target="_blank" title="" class="btn btn-success"><i class="fa fa-refresh"></i></a>
+                <a href="{{ sync_product_status_link }}" title="{{ text_product_status_sync }}" data-toggle="tooltip" target="_blank" title="" class="btn btn-primary"><i class="fa fa-cog"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %} 
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endfor %} 
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error_warning) %} 
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %} 
+        {% if (error is defined and error != "") %} 
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %} 
+        {% if (success) %} 
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %} 
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_product_listing }}</h3>
+            </div>
+            <div class="panel-body">
+                {{ googleshopping_common }} 
+                <div class="well">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-name">{{ entry_name }}</label>
+                                <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-model">{{ entry_model }}</label>
+                                <input type="text" name="filter_model" value="{{ filter_model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-listing_status">{{ column_listing_status }}</label>
+                                <select name="filter_listing_status" id="input-listing_status" class="form-control">
+                                    <option value="*"></option>
+                                    {% for key,listing_status in listing_statuses %} 
+                                        {% if (filter_listing_status == key) %} 
+                                            <option value="{{ key }}" selected="selected">{{ listing_status }}</option>
+                                            {% else %} 
+                                            <option value="{{ key }}">{{ listing_status }}</option>
+                                        {% endif %} 
+                                    {% endfor %} 
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" style="display: none">
+                            <div class="form-group">
+                                <label class="control-label" for="input-listed-on">{{ column_listed_on }}</label>
+                                <div class="input-group date">
+                                    <input type="text" name="filter_listed_on" value="{{ filter_listed_on }}" placeholder="{{ column_listed_on }}" data-format="YYYY-MM-DD" id="input-listed-on" class="form-control" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-profie_title">{{ column_profile_title }}</label>
+                                <select name="filter_profile_title" id="input-profie_title" class="form-control">
+                                    <option value="*"></option>
+                                    {% for profile in profile_result %} 
+                                        {% if (filter_profile_title == profile['id_gs_profiles']) %} 
+                                            <option value="{{ profile['id_gs_profiles'] }}" selected="selected">{{ profile['profile_title'] }}</option>
+                                            {% else %} 
+                                            <option value="{{ profile['id_gs_profiles'] }}">{{ profile['profile_title'] }}</option>
+                                        {% endif %} 
+                                    {% endfor %} 
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-listing-id">{{ column_listing_id }}</label>
+                                <input type="text" name="filter_listing_id" value="{{ filter_listing_id }}" placeholder="{{ column_listing_id }}" id="input-listing-id" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group" style="margin-top: 24px">
+                                <button type="button" id="button-filter" class="btn btn-primary"><i class="fa fa-search"></i> {{ button_filter }}</button>
+                                <button type="button" id="button-refresh" class="btn btn-default"><i class="fa fa-refresh"></i> {{ button_reset }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-product">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                                    <td class="text-center">{{ column_image }}</td>
+                                    <td class="text-left">{% if (sort == 'pd.name') %} 
+                                      <a href="{{ sort_name }}" class="{{ order }}">{{ column_name }}</a>
+                                      {% else %} 
+                                      <a href="{{ sort_name }}">{{ column_name }}</a>
+                                      {% endif %} 
+                                    </td>
+                                    <td class="text-left">{% if (sort == 'reference') %} 
+                                        <a href="{{ sort_model }}" class="{{ order }}">{{ column_model }}</a>
+                                        {% else %} 
+                                        <a href="{{ sort_model }}">{{ column_model }}</a>
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-left">{% if (sort == 'profile_title') %} 
+                                        <a href="{{ sort_profile_title }}" class="{{ order }}">{{ column_profile_title }}</a>
+                                        {% else %} 
+                                        <a href="{{ sort_profile_title }}">{{ column_profile_title }}</a>
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-left">{% if (sort == 'gpl.listing_status') %} 
+                                        <a href="{{ sort_listing_status }}" class="{{ order }}">{{ column_listing_status }}</a>
+                                        {% else %} 
+                                        <a href="{{ sort_listing_status }}">{{ column_listing_status }}</a>
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-left">{% if (sort == 'gpl.listing_id') %} 
+                                        <a href="{{ sort_listing_id }}" class="{{ order }}">{{ column_listing_id }}</a>
+                                        {% else %} 
+                                        <a href="{{ sort_listing_id }}">{{ column_listing_id }}</a>
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-left" style="display: none">{% if (sort == 'gpl.renew_flag') %} 
+                                        <a href="{{ sort_renew_status }}" class="{{ order }}">{{ column_relisting_status }}</a>
+                                        {% else %} 
+                                        <a href="{{ sort_renew_status }}">{{ column_relisting_status }}</a>
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-left">{% if (sort == 'gpl.date_listed') %} 
+                                        <a href="{{ sort_listed_on }}" class="{{ order }}">{{ column_listed_on }}</a>
+                                        {% else %} 
+                                        <a href="{{ sort_listed_on }}">{{ column_listed_on }}</a>
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-right">{{ column_action }}</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% if (googleshopping_products) %} 
+                            {% for product in googleshopping_products %} 
+                                <tr>
+                                    <td class="text-center">{% if (product['id_gs_products_list'] in selected) %} 
+                                        <input type="checkbox" name="selected[]" value="{{ product['id_gs_products_list'] }}" checked="checked" />
+                                        {% else %} 
+                                        <input type="checkbox" name="selected[]" value="{{ product['id_gs_products_list'] }}" />
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-center">{% if (product['image']) %} 
+                                        <img src="{{ product['image'] }}" alt="{{ product['name'] }}" class="img-thumbnail" />
+                                        {% else %} 
+                                        <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
+                                        {% endif %} 
+                                    </td>
+                                    <td class="text-left">{{ product['name'] }}</td>
+                                    <td class="text-left">{{ product['model'] }}</td>
+                                    <td class="text-left">{{ product['profile_title'] }}</td>
+                                    <td class="text-left">{{ product['listing_status'] }}</td>
+                                    <td class="text-left">{{ product['listing_id'] }}</td>
+                                    <td class="text-left" style="display: none">{{ product['renew_status'] }}</td>
+                                    <td class="text-left">{{ product['listed_on'] }}</td>
+                                    <td class="text-right">
+                                        {% if (product['listing_status'] == "Inactive") %} 
+                                            <a href="{{ product['enable'] }}" onclick="window.confirm('{{ text_confirm }}')" data-toggle="tooltip" title="{{ button_enable_product }}" class="btn btn-primary"><i style="padding: 0 2px" class="fa fa-step-forward"></i></a>
+                                        {% else %} 
+                                            <a href="{{ product['disable'] }}" onclick="window.confirm('{{ text_confirm }}')" data-toggle="tooltip" title="{{ button_disable_product }}" class="btn btn-primary"><i class="fa fa-ban"></i></a>
+                                        {% endif %}    
+                                        {% if (product["message"] != "") %} 
+                                            <a data-message='{{ product["message"] }}' data-toggle="modal" data-target=".bd-example-modal-sm" data-toggle="tooltip" title="{{ button_error }}" class="btn btn-warning"><i class="fa fa-exclamation-circle"></i></a>
+                                        {% endif %} 
+                                    </td>
+                                </tr>
+                                {% endfor %} 
+                                {% else %} 
+                                <tr>
+                                    <td class="text-center" colspan="9">{{ text_no_results }}</td>
+                                </tr>
+                                {% endif %} 
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-sm-6 text-left">{{ pagination }}</div>
+                    <div class="col-sm-6 text-right">{{ results }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" id="errorMessageModal"  tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ entry_error_message }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">{{ entry_no_error }}</div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	var url = 'index.php?route=extension/module/googleshopping/productListing&{{ token_key }}={{ token }}';
+
+	var filter_name = $('input[name=\'filter_name\']').val();
+
+	if (filter_name) {
+		url += '&filter_name=' + encodeURIComponent(filter_name);
+	}
+
+	var filter_model = $('input[name=\'filter_model\']').val();
+	if (filter_model) {
+		url += '&filter_model=' + encodeURIComponent(filter_model);
+	}
+
+	var filter_listing_id = $('input[name=\'filter_listing_id\']').val();
+	if (filter_listing_id) {
+		url += '&filter_listing_id=' + encodeURIComponent(filter_listing_id);
+	}
+        
+	var filter_listed_on = $('input[name=\'filter_listed_on\']').val();
+	if (filter_listed_on) {
+		url += '&filter_listed_on=' + encodeURIComponent(filter_listed_on);
+	}
+
+	var filter_listing_status = $('select[name=\'filter_profile_title\']').val();
+	if (filter_listing_status != '*') {
+		url += '&filter_profile_title=' + encodeURIComponent(filter_listing_status);
+	}
+	var filter_listing_status = $('select[name=\'filter_listing_status\']').val();
+	if (filter_listing_status != '*') {
+		url += '&filter_listing_status=' + encodeURIComponent(filter_listing_status);
+	}
+	location = url;
+});
+//--></script>
+
+<script src="view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<link href="view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" media="screen" />
+<style type="text/css">
+    .modal-body {
+          white-space: pre-wrap; /* css-3 */    
+          white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+          white-space: -pre-wrap; /* Opera 4-6 */    
+          white-space: -o-pre-wrap; /* Opera 7 */    
+          word-wrap: break-word; /* Internet Explorer 5.5+ */
+    }
+</style>
+
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+	pickTime: false
+});
+
+$('#errorMessageModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var message = button.data('message') // Extract info from data-* attributes
+    var modal = $(this);
+    if(message != '' && message != 'undefined') {
+      modal.find('.modal-body').text(message)
+    }
+});
+
+$('#button-refresh').click(function(e) {
+    var url = 'index.php?route=extension/module/googleshopping/productListing&{{ token_key }}={{ token }}';
+    location = url;        
+});
+
+$('.reniew_product').click(function() {
+    var url = $(this).attr('data'); 
+    var re_url = 'index.php?route=extension/module/googleshopping/productListing&{{ token_key }}={{ token }}';
+    $.ajax({
+        url: url+'&&{{ token_key }}={{ token }}',
+        dataType: 'json',
+        success: function(json) { 
+        }
+    });
+    location = re_url;
+    return false;
+});
+
+$('.delete_product').click(function(){
+    var url = $(this).attr('data'); 
+    var re_url = 'index.php?route=extension/module/googleshopping/productListing&{{ token_key }}={{ token }}';
+    $.ajax({
+        url: url+'&&{{ token_key }}={{ token }}',
+        dataType: 'json',
+        success: function(json) {
+        }
+    });
+    location = re_url; 
+    return false;
+});
+
+$(".formaction").bind("click", function() {
+    var confirm = window.confirm('{{ text_confirm }}');
+    if(confirm) {
+        $("#form-product").attr("action", $(this).attr("formaction"));
+        $("#form-product").submit();
+    }
+});
+//--></script>
+{{ footer }}

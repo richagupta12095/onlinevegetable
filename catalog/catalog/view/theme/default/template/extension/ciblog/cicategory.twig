@@ -1,0 +1,102 @@
+{{ header }}
+<div class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }} ciblog-content">{{ content_top }}
+      <div class="category-matter">
+      	<h2>{{ heading_title }}</h2>
+	      {% if thumb or description %}
+	      <div class="row">
+	        {% if thumb %}
+	        <div class="col-sm-2"><img src="{{ thumb }}" alt="{{ image_alt }}" title="{{ image_title }}" class="img-thumbnail" /></div>
+	        {% endif %}
+	        {% if description %}
+	        <div class="col-sm-10 cidesc cicategory-desc">{{ description }}</div>
+	        {% endif %}
+	      </div>
+	  	  {% endif %}
+      </div>
+      <hr>
+      {% if cicategories %}
+        <h3>{{ text_refine }}</h3>
+        {% if cicategories|length <= 5 %}
+        <div class="row">
+          <div class="col-sm-4">
+            <ul class="list-inline crefine-menu">
+              {% for cicategory in cicategories %}
+              <li>{% if cicategory.thumb %}<img src="{{ cicategory.thumb }}" alt="{{ cicategory.image_alt }}" title="{{ cicategory.image_title }}" class="img-thumbnail" />&nbsp;{% endif %}<a href="{{ cicategory.href }}">{{ cicategory.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        {% else %}
+        <div class="row">
+          {% for cicategory in cicategories|batch((cicategories|length / 3)|round(1, 'ceil')) %}
+          <div class="col-sm-4">
+            <ul>
+              {% for cichild in cicategory %}
+              <li>{% if cicategory.thumb %}<img src="{{ cicategory.thumb }}" alt="{{ cicategory.image_alt }}" title="{{ cicategory.image_title }}" class="img-thumbnail" />&nbsp;{% endif %}<a href="{{ cichild.href }}">{{ cichild.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% endif %}
+      {% if blogposts %}
+        <div class="row ciblog-layout1">
+          {% set sm = 6 %}
+          {% if blog_row %} {% set sm = 12/blog_row %} {% endif %}
+          {% for blogpost in blogposts %}
+            <div class="ciblogpost ciblog-layout ciblog-grid col-sm-{{ sm }} col-xs-12">
+              {% if show_title %}<h4><a href="{{ blogpost.href }}">{{ blogpost.name }}</a></h4><hr class="hr">{% endif %}
+              <ul class="ciblog-info list-inline">
+              	{% if show_author and blogpost.author.name %}<li><label>{{ text_postby }}</label> <span><a href="{{ blogpost.author.href }}">{{ blogpost.author.name }}</a></span></li>{% endif %}
+                {% if show_date_publish %}<li><label>{{ text_on }}</label> <span><a href="{{ blogpost.search_date_added }}">{{ blogpost.date_added }}</a></span></li>{% endif %}
+                {% if blogpost.rating %}<li><label>{{ text_rating }}</label> <span class="ciblog-rating rating">{% for i in 1..5 %}{% if blogpost.rating < i %}<span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>{% else %}<span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>{% endif %}{% endfor %}</span></li>{% endif %}
+              </ul>
+              <div class="ciblog-thumb">
+                {% if image_show_listing %}<div class="image img-radius">{% if blogpost.add_video_url %}<div class="civideo-container"><iframe width="{{ blogpost.image_thumb_width }}" height="{{ blogpost.image_thumb_height }}" src="{{ blogpost.video_url }}" frameborder="0" allowfullscreen></iframe></div>{% else %}<a href="{{ blogpost.href }}"><img src="{{ blogpost.thumb }}" alt="{{ blogpost.image_alt }}" title="{{ blogpost.image_title }}" class="img-responsive" /></a>{% endif %}</div>{% endif %}
+                <div>
+                  <div class="ciblog-caption">
+                  	<div class="ciblog-view">
+                  		<ul class="list-inline">
+                  			{% if show_total_view %}<li><i class="fa fa-eye"></i> {{ blogpost.viewed }}</li>{% endif %}
+                        {% if like_show_total %}<li class="hearting" data-blogid="{{ blogpost.ciblog_post_id }}">{% if blogpost.isMyHeart %}<i class="fa fa-heart"></i>{% else %}<i class="fa fa-heart-o {% if can_like %}cimyheart{% endif %}"></i>{% endif %} <span>{{ blogpost.heart }}</span></li>{% endif %}
+                        {% if comment_show_total %}<li><i class="fa fa-comments"></i> {{ blogpost.comments }}</li>{% endif %}
+                  		</ul>
+                  	</div>
+                    {% if show_description %}<div class="ciblog-description"><p>{{ blogpost.description }} </p></div>{% endif %}
+                    <a class="btn btn-primary" href="{{ blogpost.href }}" class="">{{ button_read_more }}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      {% endif %}
+      {% if not cicategories and not blogposts %}
+        <p>{{ text_empty }}</p>
+        <div class="buttons">
+          <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+        </div>
+      {% endif %}
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

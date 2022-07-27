@@ -1,0 +1,68 @@
+{{ header }}
+<div class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }} ciblog-content">{{ content_top }}
+      <h2>{{ heading_title }}</h2>
+      {% if description %}
+      <div class="row">
+        <div class="col-sm-12">{{ description }}</div>
+      </div>
+      <hr>
+      {% endif %}
+      {% set sm = 6 %}
+      {% if blog_row %} {% set sm = 12/blog_row %} {% endif %}
+      {% if blogposts %}
+      <div class="row ciblog-layout1">
+        {% for blogpost in blogposts %}
+        <div class="ciblogpost ciblog-layout ciblog-grid col-sm-{{ sm }} col-xs-12">
+          {% if show_title %}<h4><a href="{{ blogpost.href }}">{{ blogpost.name }}</a></h4><hr class="hr" />{% endif %}
+          <ul class="ciblog-info list-inline">
+            {% if show_author and blogpost.author.name %}<li><label>{{ text_postby }}</label> <span><a href="{{ blogpost.author.href }}">{{ blogpost.author.name }}</a></span></li>{% endif %}
+            {% if show_date_publish %}<li><label>{{ text_on }}</label> <span><a href="{{ blogpost.search_date_added }}">{{ blogpost.date_added }}</a></span></li>{% endif %}
+            {% if blogpost.rating %}<li><label>{{ text_rating }}</label> <span class="ciblog-rating rating">{% for i in 1..5 %}{% if blogpost.rating < i %}<span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>{% else %}<span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>{% endif %}{% endfor %}</span></li>{% endif %}
+          </ul>
+          <div class="ciblog-thumb">
+            {% if image_show_listing %}<div class="image img-radius">{% if blogpost.add_video_url %}<div class="civideo-container"><iframe width="{{ blogpost.image_thumb_width }}" height="{{ blogpost.image_thumb_height }}" src="{{ blogpost.video_url }}" frameborder="0" allowfullscreen></iframe></div>{% else %}<a href="{{ blogpost.href }}"><img src="{{ blogpost.thumb }}" alt="{{ blogpost.name }}" title="{{ blogpost.name }}" class="img-responsive" /></a>{% endif %}</div>{% endif %}
+            <div>
+              <div class="ciblog-caption">
+                <div class="ciblog-view">
+                  <ul class="list-inline">
+                    {% if show_total_view %}<li><i class="fa fa-eye"></i> {{ blogpost.viewed }}</li>{% endif %}
+                    {% if like_show_total %}<li class="hearting" data-blogid="{{ blogpost.ciblog_post_id }}">{% if blogpost.isMyHeart %}<i class="fa fa-heart"></i>{% else %}<i class="fa fa-heart-o {% if can_like %}cimyheart{% endif %}"></i>{% endif %} <span>{{ blogpost.heart }}</span></li>{% endif %}
+                    {% if comment_show_total %}<li><i class="fa fa-comments"></i> {{ blogpost.comments }}</li>{% endif %}
+                  </ul>
+                </div>
+                {% if show_description %}<div class="ciblog-description"><p>{{ blogpost.description }}</p></div>{% endif %}
+                <a href="{{ blogpost.href }}" class="btn btn-primary">{{ button_read_more }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-left">{{ pagination }}</div>
+        <div class="col-sm-6 text-right">{{ results }}</div>
+      </div>
+      {% else %}
+      <p>{{ text_empty }}</p>
+      <div class="buttons">
+        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+      </div>
+      {% endif %}
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

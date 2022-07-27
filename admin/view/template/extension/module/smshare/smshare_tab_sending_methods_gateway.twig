@@ -1,0 +1,177 @@
+<div id="profile_api_settings">
+
+    <p>
+        If you don't have an Android smartphone or simply using Android smartphone is not possible for you,
+        define a new gateway here and use it to send your SMS.
+    </p>
+
+    <div class="well">
+        Don't forget to have a look at our SMS Master gateway which offers best prices and works in all countries.
+        <a href="https://smshare.fr/contact.html" target="_blank">Contact us</a>.
+    </div>
+
+    <div class="alert alert-info" role="alert">
+        <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
+        <strong>Documentation: </strong>
+        Confused by these parameters?
+        Checkout this quick blog post:
+        <a href="https://www.smshare.fr/blog/opencart/setup-sms-gateway/index.html" target="_blank" class="alert-link"> Learn how to setup a new gateway</a>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_gateway_provider">Gateway provider</label>
+        <div class="col-sm-9">
+            <select id="smshare_core_cfg_gateway_provider" name="smshare_core_cfg_gateway_provider" class="form-control">
+                <option value=""></option>
+                <option value="profile_api_prowebsms" {{ smshare_core_cfg_gateway_provider == 'profile_api_prowebsms' ? 'selected' : '' }}>ProWebSms Master Gateway (best rates)</option>
+                <option value="profile_api" {{ smshare_core_cfg_gateway_provider == 'profile_api' ? 'selected' : '' }}>Other gateway</option>
+                <!-- basic auth support -->
+                <!-- hook_e9566 -->
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_api_url">API URL</label>
+        <div class="col-sm-9">
+            <input id="smshare_core_cfg_api_url" type="text" name="smshare_core_cfg_api_url" value="{{ smshare_core_cfg_api_url }}" class="form-control"/>
+        </div>
+    </div>
+
+
+    <hr>
+
+    <div class="alert alert-info hidden_23923" role="alert">
+        <i class="fa fa-audio-description" aria-hidden="true"></i>
+        Your Gateway API requires Basic HTTP Auth?
+        Checkout this advanced feature extension:
+        <a href="https://www.prowebtec.com/core-basic-auth-support" target="_blank" class="alert-link">Enable "Basic HTTP Auth" support</a>
+    </div>
+
+
+    <!-- basic auth support -->
+    <!-- hook_c4fe2 -->
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_api_http_method">API HTTP method</label>
+        <div class="col-sm-9">
+            <select id="smshare_core_cfg_api_http_method" name="smshare_core_cfg_api_http_method" class="form-control">
+
+                <option value="get" {{ smshare_core_cfg_api_http_method == 'get' ? 'selected' : '' }}>
+                Get</option>
+
+                <option value="post (multipart/form-data)" id="method-form-data"
+                {{ smshare_core_cfg_api_http_method == 'post (multipart/form-data)' ? 'selected' : '' }}>
+                Post (multipart/form-data)</option>
+
+                <option value="post (application/x-www-form-urlencoded)" id="method-x-www"
+                {{ smshare_core_cfg_api_http_method == 'post (application/x-www-form-urlencoded)' ? 'selected' : '' }}>
+                Post (application/x-www-form-urlencoded)</option>
+
+                <option value="post (application/json)" id="method-app-json"
+                {{ smshare_core_cfg_api_http_method == 'post (application/json)' ? 'selected' : '' }}>
+                Post (application/json)</option>
+
+            </select>
+
+            <div class="help-block">
+                <b>Which Content Type to use?</b>
+                <p>As usual, check the gateway documentation. But here are some hints:
+                <ul>
+                    <li>API from very old SMS gateways often uses <code>Post (multipart/form-data)</code></li>
+                    <li>Most recent SMS gateway APIs use <code>Post (application/x-www-form-urlencoded)</code></li>
+                    <li>Some recent gateways require all POST requests arguments to be passed as json. Select <code>Post (application/json)</code></li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_api_dest_var">The destination field</label>
+        <div class="col-sm-9">
+            <input type="text" id="smshare_core_cfg_api_dest_var" name="smshare_core_cfg_api_dest_var"
+                   value="{{ smshare_core_cfg_api_dest_var }}" class="form-control"
+                   placeholder="ex: mobiles or destinations"/>
+            <small class="help-block">This is the name of the parameter that represents the destination numbers.</small>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_api_msg_var">The message field</label>
+        <div class="col-sm-9">
+            <input type="text" id="smshare_core_cfg_api_msg_var" name="smshare_core_cfg_api_msg_var"
+                   value="{{ smshare_core_cfg_api_msg_var }}" class="form-control" placeholder="ex: message"/>
+            <small class="help-block">This is the name of the parameter that represents the message.</small>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_api_msg_to_unicode">Unicode the message</label>
+        <div class="col-sm-9">
+            <div class="radio">
+
+                <label style="margin-right: 11px;">
+                    <input type="radio" name="smshare_core_cfg_api_msg_to_unicode" {{ smshare_core_cfg_api_msg_to_unicode == 'on' ? 'checked' : '' }} value="on"/>
+                    Yes
+                </label>
+                <label style="margin-right: 11px;">
+                    <input type="radio" name="smshare_core_cfg_api_msg_to_unicode" {{ smshare_core_cfg_api_msg_to_unicode == 'on' ? '' : 'checked' }} value="off" id="smshare_core_cfg_api_msg_to_unicode" />
+                    No
+                </label>
+            </div>
+            <small class="help-block">
+                Some API gateways (Ex. for Arabic language) require the message body to be converted to Unicode.
+                <br>
+                We remove the <code>\u</code> before sending. Ex: <code>test</code> will be sent as: <code>0074006500730074</code>
+            </small>
+
+
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Additional fields:</label>
+        <div class="col-sm-9">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Value</th>
+                        {#<th class="text-center">URL encode</th>#}
+                        <th class="text-right">Add/remove</th>
+                    </tr>
+                </thead>
+                <tbody id="gw-fields">
+                {% for api_kv in smshare_core_cfg_gw_fields %}
+                    <tr data-row="">
+                        <td><input type="text" data-tv-kv-key="used-for-prowess-prefill-on-select" data-tv-name="smshare_core_cfg_gw_fields[__i__][key]" value="{{ api_kv.key }}" placeholder="field name" class="form-control"></td>
+                        <td><input type="text" data-tv-kv-val="used-for-prowess-prefill-on-select" data-tv-name="smshare_core_cfg_gw_fields[__i__][val]" value="{{ api_kv.val }}" placeholder="field value" class="form-control"></td>
+                        {#<td class="text-center" style="vertical-align: middle;">
+                            <input type="checkbox" data-tv-name="gatewayFields[__i__].urlEncode" value="true" checked="">
+                        </td>#}
+                        <td class="text-right">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default" data-del="">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-default" data-add="">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+
+
+        </div><!-- .col-sm-9 -->
+    </div><!-- form-group -->
+
+</div>

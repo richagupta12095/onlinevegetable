@@ -1,0 +1,89 @@
+<div class="panel panel-success">
+    <div class="panel-heading" role="tab" id="storeOwnerHeader">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseStoreOwnerSms" aria-expanded="false" aria-controls="collapseThree">
+                STORE OWNER NOTIFICATION
+            </a>
+        </h4>
+    </div>
+    <div id="collapseStoreOwnerSms" class="panel-collapse collapse" role="tabpanel" aria-labelledby="storeOwnerHeader">
+        <div class="panel-body">
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ smshare_entry_ntfy_admin_by_sms_on_reg }}</label>
+                <div class="col-sm-9">
+                    <div class="radio">
+
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_admin_by_sms_on_registration" value="1" {{ smshare_core_cfg_notify_admin_by_sms_on_registration ? 'checked="checked"' : '' }} />
+                            {{ text_yes }}
+                        </label>
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_admin_by_sms_on_registration" value="0" {{ smshare_core_cfg_notify_admin_by_sms_on_registration ? '' : 'checked="checked"' }} />
+                            {{ text_no }}
+                        </label>
+
+                    </div>
+                    <small class="help-block">{{ smshare_entry_ntfy_admin_by_sms_on_reg_help }}</small>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="smshare_core_cfg_on_registration_admin_tmpl">Store owner SMS template, on customer registration</label>
+                <div class="col-sm-9">
+                    <textarea id="smshare_core_cfg_on_registration_admin_tmpl" name="smshare_core_cfg_on_registration_admin_tmpl" class="form-control" cols="40" rows="5">{{ smshare_core_cfg_on_registration_admin_tmpl }}</textarea>
+                    <small class="help-block">{{ smshare_entry_cstmr_reg_available_vars }}</small>
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ smshare_entry_notify_admin_by_sms_on_checkout }}</label>
+                <div class="col-sm-9">
+                    <div class="radio">
+
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_admin_by_sms_on_checkout" value="1" {{ smshare_core_cfg_notify_admin_by_sms_on_checkout ? 'checked="checked"' : '' }} />
+                            {{ text_yes }}
+                        </label>
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_admin_by_sms_on_checkout" value="0" {{ smshare_core_cfg_notify_admin_by_sms_on_checkout ? '' : 'checked="checked"' }} />
+                            {{ text_no }}
+                        </label>
+
+                    </div>
+                    <small class="help-block">{{ smshare_entry_notify_admin_by_sms_on_checkout_help }}</small>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="smshare_core_cfg_on_checkout_admin_tmpl">Store owner SMS template</label>
+                <div class="col-sm-9">
+                    <textarea id="smshare_core_cfg_on_checkout_admin_tmpl" name="smshare_core_cfg_on_checkout_admin_tmpl" class="form-control" cols="40" rows="5">{{ smshare_core_cfg_on_checkout_admin_tmpl }}</textarea>
+                    <small class="help-block">
+                        In addition to the variables listed above, there are two special variables <b>{default_template}</b> and <b>{compact_default_template}</b>
+                        that you can use to inject the default template or a compact version of the default template (which reduces the SMS size)
+                    </small>
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="smshare_core_cfg_on_checkout_additional_numbers">{{ smshare_entry_notify_extra_by_sms_on_checkout }}</label>
+                <div class="col-sm-9">
+                    <textarea id="smshare_core_cfg_on_checkout_additional_numbers" name="smshare_core_cfg_on_checkout_additional_numbers" class="form-control" cols="40" rows="5">{{ smshare_core_cfg_on_checkout_additional_numbers }}</textarea>
+                    <small class="help-block">{{ smshare_entry_notify_extra_by_sms_on_checkout_help }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

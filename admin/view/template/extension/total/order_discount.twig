@@ -1,0 +1,259 @@
+{#
+Total Order Discount v1.4
+
+The Total Order Discount extension is for CMS Opencart 3.x.
+It allows to give a discount based on purchase total price or quantity of products in the cart.
+
+Copyright (c) 2018-2019 Andrii Burkatskyi aka underr
+
+https://www.opencart.com/index.php?route=marketplace/extension/info&extension_id=33296
+https://underr.space/en/notes/projects/project-001.html
+https://github.com/underr-ua/ocmod3-total-order-discount
+#}
+
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-total" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+                    <i class="fa fa-save"></i>
+                </button>
+                <!--<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+                    <i class="fa fa-reply"></i>
+                </a>-->
+            </div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li>
+                        <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_permission %}
+            <div class="alert alert-danger alert-dismissible">
+                <i class="fa fa-exclamation-circle"></i>
+                {{ error_permission }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-pencil"></i>
+                    {{ text_edit }}
+                </h3>
+            </div>
+            <div class="panel-body">
+                <form
+                    action="{{ action }}"
+                    method="post"
+                    enctype="multipart/form-data"
+                    id="form-total"
+                    class="form-horizontal">
+                    <ul class="nav nav-tabs" id="tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#tab-gen">
+                                {{ entry_tab_gen }}
+                            </a>
+                        </li>
+                        <!--<li>
+                            <a data-toggle="tab" href="#tab-sup">
+                                {{ entry_tab_sup }}
+                            </a>
+                        </li>-->
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-gen">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="select-status">{{ entry_status }}</label>
+                                <div class="col-sm-9">
+                                    <select name="total_order_discount_status" id="select-status" class="form-control">
+                                        {% if status %}
+                                            <option value="1" selected="selected">{{ text_enabled }}</option>
+                                            <option value="0">{{ text_disabled }}</option>
+                                        {% else %}
+                                            <option value="1">{{ text_enabled }}</option>
+                                            <option value="0" selected="selected">{{ text_disabled }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="select-base">{{ entry_base }}</label>
+                                <div class="col-sm-9">
+                                    <select name="total_order_discount_base" id="select-base" class="form-control">
+                                        {% if (base == 'Q') %}
+                                            <option value="S">{{ text_sum }}</option>
+                                            <option value="Q" selected="selected">{{ text_qty }}</option>
+                                        {% else %}
+                                            <option value="S" selected="selected">{{ text_sum }}</option>
+                                            <option value="Q">{{ text_qty }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="select-type">{{ entry_type }}</label>
+                                <div class="col-sm-9">
+                                    <select name="total_order_discount_type" id="select-type" class="form-control">
+                                        {% if (type == 'F') %}
+                                            <option value="P">{{ text_pct }}</option>
+                                            <option value="F" selected="selected">{{ text_fix }}</option>
+                                        {% else %}
+                                            <option value="P" selected="selected">{{ text_pct }}</option>
+                                            <option value="F">{{ text_fix }}</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="input-point">{{ entry_point }}</label>
+                                <div class="col-sm-3">
+                                    <input
+                                        class="form-control"
+                                        id="input-point"
+                                        min="0"
+                                        name="total_order_discount_point"
+                                        placeholder="{{ entry_point }}"
+                                        type="number"
+                                        step="any"
+                                        value="{{ point }}"/>
+                                </div>
+
+                                <label class="col-sm-3 control-label" for="input-value">
+                                    {{ entry_value }}
+                                    <span data-toggle="tooltip" title="" data-original-title="{{ help_discount_value }}"></span>
+                                </label>
+                                <div class="col-sm-3">
+                                    <input
+                                        class="form-control"
+                                        id="input-value"
+                                        name="total_order_discount_value"
+                                        placeholder="{{ entry_value }}"
+                                        type="number"
+                                        value="{{ value }}"
+                                        {% if type == 'P' %}min="-100" max="100"{% else %}min="0"{% endif %}
+                                        step="any"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group required">
+                                <label class="col-sm-3 control-label">
+                                    {{ entry_title }}
+                                </label>
+                                <div class="col-sm-9">
+                                    {% for language in languages %}
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}"/>
+                                            </span>
+                                            <input
+                                                class="form-control"
+                                                name="total_order_discount_title[{{ language.language_id }}]"
+                                                placeholder="{{ language.name }} "
+                                                type="text"
+                                                value="{{ discount_title[language.language_id] }}"/>
+                                        </div>
+
+                                    {% endfor %}
+
+                                    {% if error_discount_title %}
+                                        <div class="text-danger">
+                                            {{ error_discount_title }}
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label
+                                    class="col-sm-3 control-label"
+                                    for="input-sort-order">
+                                    {{ entry_sort_order }}
+                                </label>
+                                <div class="col-sm-9">
+                                    <input
+                                        class="form-control"
+                                        id="input-sort-order"
+                                        min="0"
+                                        name="total_order_discount_sort_order"
+                                        placeholder="{{ entry_sort_order }}"
+                                        step="1"
+                                        type="number"
+                                        value="{{ sort_order }}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="tab-sup">
+                            <div class="row">
+                                <div class="col-sm-4 col-sm-offset-4">
+                                    <div class="well">
+                                        <a
+                                            href="https://www.opencart.com/index.php?route=marketplace/extension/info&amp;extension_id=35103"
+                                            class="btn btn-danger btn-lg btn-block"
+                                            target="_blank">
+                                            Buy Total Order Discount+
+                                        </a>
+                                        <a
+                                            href="https://www.opencart.com/index.php?route=marketplace/extension/info&amp;extension_id=33296"
+                                            class="btn btn-primary btn-lg btn-block"
+                                            target="_blank">
+                                            Get Support
+                                        </a>
+                                        <a
+                                            href="https://www.opencart.com/index.php?route=marketplace/extension&amp;filter_member=ocmod.space"
+                                            class="btn btn-default btn-lg btn-block"
+                                            target="_blank">
+                                            View all extensions
+                                        </a>
+                                        <a href="https://underr.space/en/notes/projects/project-011.html" class="btn btn-default btn-lg btn-block" target="_blank">
+                                            Homepage
+                                        </a>
+                                    </div>
+                                    <div class="text-center">
+                                        © Copyright 2018-{{ 'now'|date('Y') }} Andrii Burkatskyi aka underr
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script
+    type="text/javascript">
+    <!--
+
+    function setAttr(e1, e2) {
+        if ($(e1).val() == "P") {
+            $(e2).attr({'min': '-100', 'max': '100'});
+        } else if ($(e1).val() == "F") {
+            $(e2).removeAttr('min max');
+        }
+    }
+
+    setAttr('#select-type', '#input-value');
+
+    $('#select-type').on('change', function() {
+        setAttr(this, '#input-value');
+    });
+
+    //
+    -->
+</script>
+{{ footer }}

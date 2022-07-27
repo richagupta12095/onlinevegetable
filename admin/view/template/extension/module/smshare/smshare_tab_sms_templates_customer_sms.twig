@@ -1,0 +1,185 @@
+<div class="panel panel-warning">
+    <div class="panel-heading" role="tab" id="headingThree">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                CUSTOMER NOTIFICATION
+            </a>
+        </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ smshare_entry_notify_customer_by_sms_on_registration }}</label>
+                <div class="col-sm-9">
+                    <div class="radio">
+
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_customer_by_sms_on_registration" value="1" {{ smshare_core_cfg_notify_customer_by_sms_on_registration ? 'checked="checked"' : '' }} />
+                            {{ text_yes }}
+                        </label>
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_customer_by_sms_on_registration" value="0" {{ smshare_core_cfg_notify_customer_by_sms_on_registration ? '' : 'checked="checked"' }} />
+                            {{ text_no }}
+                        </label>
+
+                    </div>
+                    <small class="help-block">{{ smshare_entry_notify_customer_by_sms_on_registration_help }}</small>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Customer <b>registration</b> SMS template</label>
+                <div class="col-sm-9">
+                    {% for language in languages %}
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                              <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                            </span>
+                            <textarea class="form-control" name="smshare_core_cfg_on_registration_customer_tmpls[{{ language.code }}]" cols="40" rows="5">{{ smshare_core_cfg_on_registration_customer_tmpls[language.code] }}</textarea>
+                        </div>
+                    {% endfor %}
+                    <small class="help-block">{{ smshare_entry_cstmr_reg_available_vars }}</small>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{ smshare_entry_notify_customer_by_sms_on_checkout }}</label>
+                <div class="col-sm-9">
+                    <div class="radio">
+
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_customer_by_sms_on_checkout" value="1" {{ smshare_core_cfg_notify_customer_by_sms_on_checkout ? 'checked="checked"' : '' }} />
+                            {{ text_yes }}
+                        </label>
+                        <label style="margin-right: 11px;">
+                            <input type="radio" style="vertical-align: top;" name="smshare_core_cfg_notify_customer_by_sms_on_checkout" value="0" {{ smshare_core_cfg_notify_customer_by_sms_on_checkout ? '' : 'checked="checked"' }} />
+                            {{ text_no }}
+                        </label>
+
+                    </div>
+                    <small class="help-block">{{ smshare_entry_notify_customer_by_sms_on_checkout_help }}</small>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Customer <b>new order</b> SMS template</label>
+                <div class="col-sm-9">
+                    {% for language in languages %}
+                        <div class="input-group">
+                    <span class="input-group-addon">
+                      <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                    </span>
+                            <textarea class="form-control" name="smshare_core_cfg_on_checkout_customer_tmpls[{{ language.code }}]" cols="40" rows="5">{{ smshare_core_cfg_on_checkout_customer_tmpls[language.code] }}</textarea>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="smshare_core_cfg_donotsend_sms_on_checkout_coupon_keywords">Do-not-send keywords</label>
+                <div class="col-sm-9">
+                    <textarea id="smshare_core_cfg_donotsend_sms_on_checkout_coupon_keywords" name="smshare_core_cfg_donotsend_sms_on_checkout_coupon_keywords" cols="40" rows="5" class="form-control" style="max-width: 288px;">{{ smshare_core_cfg_donotsend_sms_on_checkout_coupon_keywords }}</textarea>
+                    <small class="help-block">Do not send SMS to customer on <b>new order</b> if one of the following keywords is used in the coupon during checkout.<br />One keyword per line (a keyword can contain spaces).</small>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Do-not-send statuses</label>
+                <div class="col-sm-9">
+                    <div class="well well-sm" style="height: 290px; overflow: auto; resize: vertical; max-width: 288px;">
+                        {% for order_status in order_statuses %}
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="smshare_core_cfg_donotsend_sms_on_these_checkout_statuses[]"
+                                           value="{{ order_status.order_status_id }}"
+                                            {{ order_status.order_status_id in smshare_core_cfg_donotsend_sms_on_these_checkout_statuses ? 'checked' : '' }}
+                                    />
+                                    {{ order_status.name }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <small class="help-block">Do not send SMS to customer on <b>new order</b> if the order status is one of the checked statuses</small>
+                </div>
+            </div>
+
+
+            <hr />
+
+            <div class="form-group" id="os-observers-area">
+                <label class="col-sm-3 control-label">SMS template on order status change
+                    <small class="help-block" style="text-align: justify;">
+                        SMS template to be used when you update order status in the order history page.
+                        <br />
+                        (you must have checked the <i>“Notify by SMS”</i> checkbox).
+                    </small>
+                    <button type="button" data-tv-add-observer class="btn btn-info">Add New Notification</button>
+
+                </label>
+
+
+                {#<div class="col-sm-9">#}
+                <div class="col-sm-6">
+
+                    <div class="well">Empty text box will use default SMS template.</div>
+
+                    <style>
+
+                        .observer-panel{
+                            margin-bottom: 11px !important;
+                            max-width: 588px;
+                        }
+                    </style>
+
+
+
+
+                    <div id="observers-wrapper">
+
+                        {% for observer in smshare_core_cfg_os_observers %}
+                            <div class="panel panel-default observer-panel" data-tv-observer-container {{ loop.last ? ' data-observer-replicator style="display: none;" ' }}>
+
+                                <div class="panel-heading">
+                                    <select data-tv-rename="smshare_core_cfg_os_observers[__i__][order_status]"
+                                            class="form-control">
+
+                                        <option value="-1">--- Choose ---</option>
+                                        {% for order_status in order_statuses %}
+                                            <option value="{{ order_status.order_status_id }}" {{ order_status.order_status_id == observer.order_status ? 'selected' : '' }}>{{ order_status.name }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+                                <div class="panel-body">
+                                    {% for language in languages %}
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                                            <textarea class="form-control"
+                                                      data-tv-rename="smshare_core_cfg_os_observers[__i__][template][__lg__]"
+                                                      data-tv-lg="{{ language.code }}"
+                                                      rows="9">{{ observer.template[language.code] }}</textarea>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="panel-footer">
+                                    <button type="button" data-tv-del-observer class="btn btn-danger">Delete</button>
+                                    <button type="button" data-tv-add-observer="add-after" class="btn btn-info">Add New Notification</button>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+                    </div><!-- #observers-wrapper -->
+                </div><!-- .col-sm-9 -->
+            </div><!-- .form-group -->
+        </div>
+    </div>
+</div>

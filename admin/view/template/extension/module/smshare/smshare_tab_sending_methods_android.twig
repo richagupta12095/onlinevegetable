@@ -1,0 +1,23 @@
+<div id="profile_android_settings">
+
+    <p>
+        If you choose android as sending method, you must enter your smartphone access token and uuid (Universally unique identifier) here below.
+        <br>
+        These values can be found in your ProWebSms (smshare) Dashboard → Smartphones. <a href="https://smshare.fr/blog/opencart/use-smartphone-or-gateway-created-in-your-prowebsms-dashboard/index.html">See this blog post for more info.</a>
+    </p>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_smartphone_access_token">{{ text_smartphone_access_token }}</label>
+        <div class="col-sm-9">
+            <input type="text" id="smshare_core_cfg_smartphone_access_token" name="smshare_core_cfg_smartphone_access_token" value="{{ smshare_core_cfg_smartphone_access_token }}" class="form-control"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="smshare_core_cfg_smartphone_uuid">{{ text_smartphone_uuid }}</label>
+        <div class="col-sm-9">
+            <input id="smshare_core_cfg_smartphone_uuid" type="text" name="smshare_core_cfg_smartphone_uuid" value="{{ smshare_core_cfg_smartphone_uuid }}" class="form-control"/>
+        </div>
+    </div>
+
+</div>

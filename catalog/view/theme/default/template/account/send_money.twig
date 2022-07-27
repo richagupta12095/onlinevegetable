@@ -1,0 +1,89 @@
+{{ header }}
+
+<div class="container">
+
+  <div class=""><div class="col-md-12 col-sm-12 col-xs-12"> {% if error_warning %}
+
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+
+  {% endif %}</div></div>
+
+ 
+
+  <div class="row">{{ column_left }}
+
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}    
+    {% endif %}
+
+    <div id="content" class="{{ class }}">{{ content_top }}
+<ul class="breadcrumb">
+
+    {% for breadcrumb in breadcrumbs %}
+
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+
+    {% endfor %}
+
+  </ul>
+      <h1 class="co-heading">{{ text_send_money }}</h1>
+
+      
+
+        <legend>{{ text_balance }} <b> {{ balance }}</b></legend>
+
+     
+
+      
+
+            <form action="{{ send_money }}" method="post" class="form-horizontal">
+<fieldset>
+
+<div class="row">
+<div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group">
+
+                <label class="col-md-12 control-label" for="input-email">{{ text_email }}</label>
+
+               <div class="col-md-12"> <input type="text" name="email" value="" placeholder="{{ text_email }}" id="input-email" class="form-control"></div>
+
+              </div></div>
+<div class="col-md-6 col-sm-6 col-xs-12"><div class="form-group">
+
+                <label class="col-md-12 control-label" for="input-amount">{{ text_amount }}</label>
+
+                <div class="col-md-12"><input type="number" name="amount" value="" placeholder="{{ text_amount }}" id="input-amount" class="form-control"></div>
+
+              </div></div>
+
+
+</div>
+              
+
+              
+
+             
+</fieldset>
+
+
+<div class="buttons clearfix">
+          
+          <div class="pull-right">
+            <input type="submit" value="{{ send }}" class="btn btn-primary">
+          </div>
+</div>
+
+            </form>
+
+        
+
+      {{ content_bottom }}</div>
+
+    {{ column_right }}</div>
+
+</div>
+
+{{ footer }}

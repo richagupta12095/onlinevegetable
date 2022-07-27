@@ -1,0 +1,46 @@
+{% if active_plan %}
+<div class="membership_active">
+ 
+ <div class="iconsec">
+ 
+
+    <div class="activate_icon"><!-- <i class="fa fa-check-apple" aria-hidden="true"></i> -->
+   
+   <span><i class="fa fa-check-circle-o" aria-hidden="true"></i> {{ text_active }}</span>
+   
+   
+     {% if addone1 %}
+            <span> <i class="fa fa-plus" aria-hidden="true"></i> <a href="{{addone1}}">Indian Vegetables </a></span>
+            <span> <i class="fa fa-plus" aria-hidden="true"></i> <a href="{{addone2}}">Exotic Vegetables </a></span>
+
+      {% endif %}
+
+      {% if urlvegitable %}
+        <span> <i class="fa fa-apple" aria-hidden="true"></i>   <a href="{{urlvegitable}}">Get Your vegitable</a></span>
+    {% endif %}
+	 </div>
+	 </div>
+
+  <div class="active_heading">
+    
+   
+	 <h3>{{ active_plan.plan_name }}</h3>
+	 
+ 
+  </div>
+  <ul class="listingstyle">
+    <li>{{ text_active_plan }}: <b>{{ active_plan.name }}</b></li>
+    <li>{{ text_active_startdate }}: <b>{{ active_plan.start_date }}</b></li>
+    <li>{{ text_active_expdate }}: <b>{{ active_plan.end_date }}</b></li>
+    {% if active_plan.plan_info %}
+    <li>{{ text_active_info }}:
+      <ul>
+        {% for plan_info in active_plan.plan_info %}
+        <li>{{ plan_info.name }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}

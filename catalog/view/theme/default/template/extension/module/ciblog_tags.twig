@@ -1,0 +1,14 @@
+<div class="ciblog-tags ciblog-panel" id="ciblog-tags{{ module }}">
+  <h3 class="panel-title">{{ text_title }}</h3>
+  {% if tags %}
+    <p class="ciblog-tags"><i class="fa fa-tags" aria-hidden="true" title="{{ text_tags }}"></i>
+      {% set i = 0 %}
+      {% set c = tags|length %}
+      {% for tag in tags %}
+        <a href="{{ tag.href }}">{{ tag.tag }}</a>
+        {% if i < c-1 %},{% endif %}
+        {% set i = i+1 %}
+      {% endfor %}
+    </p>
+  {% endif %}
+</div>

@@ -1,0 +1,148 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="button" data-toggle="tooltip" title="Approve" class="btn btn-success" onclick="if(!$('.checkbox:checked').length){alert('Please Select Request..!'); return false;}$('#form-request').attr('action','{{ approveurl }}');confirm('Are You Sure To Approve Selected ?') ? $('#form-request').submit() : false;"><i class="fa fa-check"></i></button>
+        <button type="button" data-toggle="tooltip" title="Reject" class="btn btn-danger" onclick="if(!$('.checkbox:checked').length){alert('Please Select Request..!'); return false;}$('#form-request').attr('action','{{ rejecturl }}'); confirm('Are You Sure To Reject Selected ?') ? $('#form-request').submit() : false;"><i class="fa fa-close "></i></button>
+        <!-- <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-request').submit() : false;"><i class="fa fa-trash-o"></i></button> -->
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-inline" action="{{ formurl }}" method="post">
+              <div class="form-group">
+                <label for="datefrom">From Date</label>
+                <input type="text" class="form-control date" value="{{ datefrom }}" name="datefrom" id="datefrom">
+              </div>
+              <div class="form-group">
+                <label for="dateto">TO</label>
+                <input type="text" class="form-control date" value="{{ dateto }}" name="dateto" id="dateto">
+              </div>
+              <div class="form-group">
+                <label > &nbsp; Email / Phone</label>
+                <input type="text" class="form-control" value="{{ email }}" name="email">
+              </div> &nbsp; 
+              <div class="form-group">
+                <label> &nbsp; Status</label>
+                <select name="status" class="form-control">
+                  <option value="" {{ ((status == '')? 'selected' : '') }} > - </option>
+                  <option value="0" {{ ((status == '0')? 'selected' : '') }} >Pending</option>
+                  <option value="1" {{ ((status == '1')? 'selected' : '') }} >Approve</option>
+                  <option value="2" {{ ((status == '2')? 'selected' : '') }} >Reject</option>
+                </select>
+              </div> &nbsp; 
+              <button type="submit" class="btn btn-default">Filter</button>
+            </form>
+            <br>
+          </div>
+        </div>
+        <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-request">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                  <td class="text-right">{{ column_customer }}</td>
+                  <td class="text-right">{{ column_description }}</td>
+                  <td class="text-right">{{ column_price }}</td>
+                  <td class="text-right">Status</td>
+                  <td class="text-right">{{ column_date }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if requests %}
+                {% for request in requests %}
+                <tr>
+                  <td class="text-center">{% if selected in request.request_id %}
+                    <input type="checkbox" class="checkbox" name="selected[]" value="{{ request.request_id }}" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" class="checkbox" name="selected[]" value="{{ request.request_id }}" />
+                    {% endif %}</td>
+                  <td class="text-left"><a href="{{ request.c_link }}">{{ request.customer }}</a></td>
+                  <td class="text-left"><div class="dis_edit" id="{{ request.request_id }}">{{ request.description }}</div></td>
+                  <td class="text-right">{{ request.price }}</td>
+                  <td class="text-right">
+                  {% if request.status == 1 %}
+                    <span style="color:green;">Approve</span>
+                  {% elseif request.status == 2 %}
+                    <span style="color:red;">Reject</span>
+                  {% else %}
+                    <span style="color:#5bc0de;">Pending</span>
+                  {% endif %}
+                  </td>
+                  <td class="text-right">{{ request.date }}</td>
+                </tr>                
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="6">{{ text_no_results }}</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<input  type="hidden" class="dis_edit_url" value="{{ dis_edit }}">
+<script type="text/javascript">
+  $('.date').datetimepicker({
+    pickTime: false
+  });
+  $('.dis_edit').dblclick(function(){
+    if(!$(this).find('button').length){
+      var id = $(this).attr('id');
+      var text = $(this).text();
+      html = "<form><textarea name='description' style='width: 80%;'>"+text+"</textarea><input type='hidden' name='request_id' value='"+id+"'><button class='update btn'>Save</button></form>";
+      $(this).html(html);
+    }
+  });
+  $('.dis_edit').delegate('.update','click',function(){
+    var form = $(this).parents('form');
+    var id = $(form).find("[name='request_id']").val();
+    var text = $(form).find('textarea').val();
+    var _t = $(this);
+    $(this).button('loading')
+    $.ajax({
+      url:$('.dis_edit_url').val(),
+      data:$(form).serialize(),
+      type:'POST',
+      success:function(){
+        $(_t).button('reset');
+        $('.dis_edit[id='+id+']').html(text);
+      }
+    });
+    return false;
+  });
+</script>
+{{ footer }}

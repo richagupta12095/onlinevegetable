@@ -1,0 +1,657 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" id="submit-button-profile" form="gs-profile-add" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %} 
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endfor %} 
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if (error['error_warning'] is defined) %} 
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error['error_warning'] }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %} 
+        {% if (success is defined and success != '') %} 
+            <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %} 
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="gs-profile-add" class="form-horizontal">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit_profile_add }}</h3>
+                </div>
+                <div class="panel-body">
+                    {{ googleshopping_common }} 
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-general">
+                            <input type="hidden" name="googleshopping[profile][id_google_cat_final]" value="{% if (googleshopping['profile']['id_google_cat_final'] is defined) %} {{ googleshopping['profile']['id_google_cat_final'] }}{% endif %}" placeholder="" id="id_googleshopping_cat_final" class="form-control"/>
+                            <input type="hidden" name="googleshopping[profile][id_google_profiles]" value="{% if (googleshopping['profile']['id_google_profiles'] is defined) %} {{ googleshopping['profile']['id_google_profiles'] }}{% endif %}" placeholder="" id="id_googleshopping_profiles" class="form-control"/>
+                            <input type="hidden" name="googleshopping[profile][google_cat_text]" value="{% if (googleshopping['profile']['google_cat_text'] is defined) %} {{ googleshopping['profile']['google_cat_text'] }}{% endif %}" placeholder="" id="googleshopping_cat_text" class="form-control"/>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="googleshopping-country">{{ text_googleshopping_country }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][country]" id="googleshopping-country" class="form-control" required="required">
+                                        {% for countries in enabled_countries %} 
+                                            {% if (countries['id_gs_countries'] == google_select_countries) %} 
+                                                <option value="{{ countries['id_gs_countries'] }}" selected="selected">{{ countries['country_name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ countries['id_gs_countries'] }}">{{ countries['country_name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="googleshopping-language">{{ text_googleshopping_language }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][language]" id="googleshopping-language" class="form-control" required="required">
+                                        {% if (languages is not empty) %} 
+                                            {% for lang in languages %} 
+                                                {% if (lang['id_gs_languages'] == selected_language) %} 
+                                                    <option value="{{ lang['id_gs_languages'] }}" selected="selected">{{ lang['lang_name'] }}</option>
+                                                {% else %} 
+                                                    <option value="{{ lang['id_gs_languages'] }}">{{ lang['lang_name'] }}</option>
+                                                {% endif %} 
+                                            {% endfor %} 
+                                        {% else %} 
+                                            <option value="" selected="selected">{{ text_googleshopping_language_select }}</option>
+                                        {% endif %} 
+                                    </select>
+                                    {% if (error_googleshopping_language) %} 
+                                        <div class="text-danger">{{ error_googleshopping_language }}</div>
+                                    {% endif %} 
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="opencartshopping-language">{{ text_opencartshopping_language }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][opencart_language]" id="opencartshopping-language" class="form-control" required="required">
+                                        {% if (opencart_languages is not empty) %} 
+                                            <option value="">{{ text_opencartshopping_language_select }}</option>
+                                            {% for lang in opencart_languages %} 
+                                                {% if (lang['language_id'] == selected_oc_language) %} 
+                                                    <option value="{{ lang['language_id'] }}" selected="selected">{{ lang['name'] }}</option>
+                                                {% else %} 
+                                                    <option value="{{ lang['language_id'] }}">{{ lang['name'] }}</option>
+                                                {% endif %} 
+                                            {% endfor %} 
+                                        {% else %} 
+                                            <option value="" selected="selected">{{ text_opencartshopping_language_select }}</option>
+                                        {% endif %} 
+                                    </select>
+                                    {% if (error_googleshopping_language) %} 
+                                        <div class="text-danger">{{ error_googleshopping_language }}</div>
+                                    {% endif %} 
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="googleshopping-currency">{{ text_googleshopping_currency }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][currency]" id="googleshopping-currency" class="form-control" required="required">
+                                        {% if (currencys['currencies'] is not empty) %} 
+                                            {% for currency in currencys['currencies'] %} 
+                                                {% if (currency['id_gs_currencies'] == selected_currency) %} 
+                                                    <option value="{{ currency['id_gs_currencies'] }}" selected="selected">{{ currency['currency_name'] }}</option>
+                                                {% else %} 
+                                                    <option value="{{ currency['id_gs_currencies'] }}">{{ currency['currency_name'] }}</option>
+                                                {% endif %} 
+                                            {% endfor %} 
+                                        {% else %} 
+                                            <option value="" selected="selected">{{ text_googleshopping_currency_select }}</option>
+                                        {% endif %} 
+                                    </select>
+                                    {% if (error_googleshopping_currency) %} 
+                                        <div class="text-danger">{{ error_googleshopping_currency }}</div>
+                                    {% endif %} 
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="googleshopping_profile_title">{{ text_profile_title }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="googleshopping[profile][profile_title]" value="{% if (googleshopping['profile']['profile_title'] is defined) %}{{ googleshopping['profile']['profile_title'] }}{% endif %}" placeholder="" id="googleshopping_profile_title" class="form-control" required="required"/>
+                                    {% if (error_googleshopping_profile_title) %} 
+                                        <div class="text-danger">{{ error_googleshopping_profile_title }}</div>
+                                    {% endif %} 
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="googleshopping-category">{{ text_googleshopping_category }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][googleshopping_category]" id="googleshopping-category" class="form-control googleshopping_root" required="required">
+                                        {% for categories in google_categories %} 
+                                            {% if (categories['category_code'] == '') %} 
+                                                <option value="{{ categories['category_code'] }}" selected="selected">{{ categories['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ categories['category_code'] }}">{{ categories['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                    {% if (error_googleshopping_category) %} 
+                                        <div class="text-danger">{{ error_googleshopping_category }}</div>
+                                    {% endif %} 
+                                </div>
+                            </div>    
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="input-category1">{{ text_store_category }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="category" value="" placeholder="{{ text_store_category }}" id="input-category" class="form-control" />
+                                    <div id="product-category" class="well well-sm" style="height: 150px; overflow: auto;">
+                                        {% for product_category in product_categories %} 
+                                            <div id="product-category{{ product_category['category_id'] }}"><i class="fa fa-minus-circle"></i> {{ product_category['name'] }} 
+                                                <input type="hidden" name="product_category[]" value="{{ product_category['category_id'] }}" class="category-selection" />
+                                            </div>
+                                        {% endfor %} 
+                                    </div>
+                                    {% if (error_google_store_category) %} 
+                                        <div class="text-danger">{{ error_google_store_category }}</div>
+                                    {% endif %} 
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="googleshopping_gtin"><span data-toggle="tooltip" title="{{ identifier_field }}">{{ text_gtin }}</span></label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][gtin]" id="googleshopping_gtin" class="form-control">
+                                        {% for gtin in googleshopping_gtin %} 
+                                            {% if (gtin['id_gtin'] == selected_gtin) %} 
+                                                <option value="{{ gtin['id_gtin'] }}" selected="selected">{{ gtin['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ gtin['id_gtin'] }}">{{ gtin['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_size">{{ text_size }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][size]" id="googleshopping_size" class="form-control">
+                                        {% for option in options %} 
+                                            {% if (option['id'] == selected_size) %} 
+                                                <option value="{{ option['id'] }}" selected="selected">{{ option['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ option['id'] }}">{{ option['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_size_type">{{ text_size_type }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][size_type]" id="googleshopping_size_type" class="form-control">
+                                        {% for type in size_type %} 
+                                            {% if (type['id'] == selected_size_type) %} 
+                                                <option value="{{ type['id'] }}" selected="selected">{{ type['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ type['id'] }}">{{ type['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_text_size_system">{{ text_size_system }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][size_system]" id="googleshopping_text_size_system" class="form-control">
+                                        {% for system in size_system %} 
+                                            {% if (system['id'] == selected_system) %} 
+                                                <option value="{{ system['id'] }}" selected="selected">{{ system['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ system['id'] }}">{{ system['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_color">{{ text_color }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][color]" id="googleshopping_color" class="form-control">
+                                        {% for option in options %} 
+                                            {% if (option['id'] == selected_color) %} 
+                                                <option value="{{ option['id'] }}" selected="selected">{{ option['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ option['id'] }}">{{ option['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_material">{{ text_material }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="googleshopping[profile][material]" value="{% if (selected_material is defined) %}{{ selected_material }}{% endif %}" placeholder="" id="googleshopping_material" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_pattern">{{ text_pattern }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="googleshopping[profile][pattern]" value="{% if (selected_pattern is defined) %}{{ selected_pattern }}{% endif %}" placeholder="" id="googleshopping_pattern" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_gender">{{ text_gender }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][gender]" id="googleshopping_gender" class="form-control">
+                                        {% for genders in gender %} 
+                                            {% if (genders['id'] == selected_gender) %} 
+                                                <option value="{{ genders['id'] }}" selected="selected">{{ genders['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ genders['id'] }}">{{ genders['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_age_group">{{ text_age_group }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][age_group]" id="googleshopping_age_group" class="form-control">
+                                        {% for group in age_group %} 
+                                            {% if (group['id'] == selected_age_group) %} 
+                                                <option value="{{ group['id'] }}" selected="selected">{{ group['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ group['id'] }}">{{ group['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="googleshopping_adult_content">{{ text_adult_content }}</label>
+                                <div class="col-sm-10">
+                                    <select name="googleshopping[profile][adult_content]" id="googleshopping_adult_content" class="form-control">
+                                        {% for content in adult_content %} 
+                                            {% if (content['id'] == selected_content) %} 
+                                                <option value="{{ content['id'] }}" selected="selected">{{ content['name'] }}</option>
+                                            {% else %} 
+                                                <option value="{{ content['id'] }}">{{ content['name'] }}</option>
+                                            {% endif %} 
+                                        {% endfor %} 
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="googleshopping_text_shipping">{{ text_shipping }}</label>
+                                <div class="col-sm-10">
+                                    <div class="well well-sm" style="height: 150px; overflow: auto;">
+                                        {% for shipping in shippings %} 
+                                            <div class="checkbox" style="margin-left: 20px;">
+                                                {% if (shipping['code'] in selected_shipping) %} 
+                                                    <input class='checkbox-code' type="checkbox" name="googleshopping[profile][shipping][]" value="{{ shipping['code'] }}" checked="checked" data-rule-ocmultiselect="true"/>
+                                                    {{ shipping['name'] }} 
+                                                {% else %} 
+                                                    <input class='checkbox-code' type="checkbox" name="googleshopping[profile][shipping][]" value="{{ shipping['code'] }}" data-rule-ocmultiselect="true"/>
+                                                    {{ shipping['name'] }} 
+                                                {% endif %} 
+                                            </div>
+                                        {% endfor %} 
+                                    </div>
+                                    {% if (error_googleshopping_shipping) %} 
+                                        <div class="text-danger">{{ error_googleshopping_shipping }}</div>
+                                    {% endif %} 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_google_adsense }}</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="googleshopping_custom_label_0">{{ text_custom_label_0 }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="googleshopping[profile][custom_label_0]" value="{% if (googleshopping['profile']['custom_label_0'] is defined) %}{{ googleshopping['profile']['custom_label_0'] }}{% endif %}" placeholder="" id="googleshopping_custom_label_0" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="googleshopping_custom_label_1">{{ text_custom_label_1 }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="googleshopping[profile][custom_label_1]" value="{% if (googleshopping['profile']['custom_label_1'] is defined) %}{{ googleshopping['profile']['custom_label_1'] }}{% endif %}" placeholder="" id="googleshopping_custom_label_1" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="googleshopping_custom_label_2">{{ text_custom_label_2 }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="googleshopping[profile][custom_label_2]" value="{% if (googleshopping['profile']['custom_label_2'] is defined) %}{{ googleshopping['profile']['custom_label_2'] }}{% endif %}" placeholder="" id="googleshopping_custom_label_2" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="googleshopping_custom_label_3">{{ text_custom_label_3 }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="googleshopping[profile][custom_label_3]" value="{% if (googleshopping['profile']['custom_label_3'] is defined) %}{{ googleshopping['profile']['custom_label_3'] }}{% endif %}" placeholder="" id="googleshopping_custom_label_3" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="googleshopping_custom_label_4">{{ text_custom_label_4 }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="googleshopping[profile][custom_label_4]" value="{% if (googleshopping['profile']['custom_label_4'] is defined) %}{{ googleshopping['profile']['custom_label_4'] }}{% endif %}" placeholder="" id="googleshopping_custom_label_4" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="view/javascript/googleshopping/jquery.validate.min.js"></script>
+<script src="view/javascript/googleshopping/jquery.custom.validation.js"></script>
+<script src="view/javascript/googleshopping/additional-methods.min.js"></script>
+
+
+<style type="text/css">
+    .image-loader-temp{
+        text-align: center;
+    }
+    .checkbox label{
+        display:none !important;
+    }
+</style>
+<script>
+$.extend( $.validator.messages, {
+	required: '{{ required }}',
+        remote: '{{ remote }}',
+        email: '{{ email }}',
+        url: '{{ url }}',
+        date: '{{ date }}',
+        dateISO: '{{ dateISO }}',
+        number: '{{ number }}',
+        digits: '{{ digits }}',
+        creditcard: '{{ creditcard }}',
+        equalTo: '{{ equalTo }}',
+        maxlength: '{{ maxlength }}',
+        minlength: '{{ minlength }}',
+        rangelength: '{{ rangelength }}',
+        range: '{{ range }}',
+        max: '{{ max }}',
+        min: '{{ min }}',
+        shipmultiselect: '{{ ocmultiselect }}',
+});
+
+var messages = {
+    mandatory: '{{ mandatory }}',
+    price: '{{ price }}',
+    decimalNotRequired: '{{ decimalNotRequired }}',
+    email: '{{ email }}',
+    passwd: '{{ passwd }}',
+    notRequiredPasswd: '{{ notRequiredPasswd }}',
+    mobile: '{{ mobile }}',
+    addressLine1: '{{ addressLine1 }}',
+    addressLine2: '{{ addressLine2 }}',
+    digit: '{{ digit }}',
+    notRequiredDigit: '{{ notRequiredDigit }}',
+    firstname: '{{ firstname }}',
+    lastname: '{{ lastname }}',
+    middlename: '{{ middlename }}',
+    requiredMin2Max60NoSpecial: '{{ requiredMin2Max60NoSpecial }}',
+    requiredip: '{{ requiredip }}',
+    optionalip: '{{ optionalip }}',
+    requiredimage: '{{ requiredimage }}',
+    optionalimage: '{{ optionalimage }}',
+    requiredcharonly: '{{ requiredcharonly }}',
+    optionalcharonly: '{{ optionalcharonly }}',
+    barcode: '{{ barcode }}',
+    ean: '{{ ean }}',
+    upc: '{{ upc }}',
+    size: '{{ size }}',
+    requiredurl: '{{ requiredurl }}',
+    optionalurl: '{{ optionalurl }}',
+    carrier: '{{ carrier }}',
+    brand: '{{ brand }}',
+    optionalcompany: '{{ optionalcompany }}',
+    requiredcompany: '{{ requiredcompany }}',
+    sku: '{{ sku }}',
+    requiredmmddyy: '{{ requiredmmddyy }}',
+    optionalmmddyy: '{{ optionalmmddyy }}',
+    requiredddmmyy: '{{ requiredddmmyy }}',
+    optionalddmmyy: '{{ optionalddmmyy }}',
+    optionalpercentage: '{{ optionalpercentage }}',
+    requiredpercentage: '{{ requiredpercentage }}',
+    checktags: '{{ checktags }}',
+    checkhtmltags: '{{ checkhtmltags }}',
+    requireddocs: '{{ requireddocs }}',
+    optionaldocs: '{{ optionaldocs }}',
+    requiredcolor: '{{ requiredcolor }}',
+    optionalcolor: '{{ optionalcolor }}',
+    shipmultiselect: '{{ ocmultiselect }}'
+};
+    
+$(document).ready(function(e) {
+    $('#submit-button-profile').bind('click',function() {
+        $("#gs-profile-add").validate({
+            errorClass: "text-danger",
+            highlight: function (label) {
+                $(label).closest('.form-group').removeClass('has-success').addClass('has-error');
+            },
+            success: function (label) {
+                $('.checkbox .text-danger').remove();
+                $(label).closest('.form-group').removeClass('has-error');
+                label.remove();
+            },
+            rules: {
+                'category': {
+                    'xrequire_from_group': ["1", '.category-selection'],
+                }
+            }
+        });
+        var final;
+        var error_cat = 0;
+        $(".googleshopping_root").each(function() {
+            final = ($(this).val());
+            if (final == 'undefined' || final == 0) {
+                error_cat = 1;
+                alert('Select till leaf category of google category');
+            }
+        });
+        $('.checkbox-code').closest('.form-group').removeClass('has-error');
+        $('.checkbox-code').closest('.col-sm-10').find('.text-danger').html('');
+        $('.checkbox .text-danger').remove();
+        if(!$('.checkbox-code').is(":checked")){
+            $('.checkbox-code').closest('.form-group').addClass('has-error');
+            $('.checkbox-code').closest('.col-sm-10').append('<div class="text-danger">{{ ocmultiselect }}</div>');
+            $('.checkbox .text-danger').remove();
+        }  
+        if(error_cat) {
+            $('.googleshopping_root').closest('.form-group').addClass('has-error');
+            return false;
+        }
+    }); 
+});
+
+$('.checkbox-code').bind('click',function() {
+    $('.checkbox-code').closest('.form-group').removeClass('has-error');
+            $('.checkbox-code').closest('.col-sm-10').find('.text-danger').html('');
+            $('.checkbox .text-danger').remove();
+            if(!$('.checkbox-code').is(":checked")){
+                $('.checkbox-code').closest('.form-group').addClass('has-error');
+                $('.checkbox-code').closest('.col-sm-10').append('<div class="text-danger">{{ ocmultiselect }}</div>');
+                $('.checkbox .text-danger').remove();
+            }
+});
+
+$('input[name=\'category\']').autocomplete({
+    'source': function(request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/category/autocomplete&{{ token_key }}={{ token }}&filter_name=' +  encodeURIComponent(request),
+            dataType: 'json',
+            success: function(json) {
+                response($.map(json, function(item) {
+                    return {
+                        label: item['name'],
+                        value: item['category_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function(item) {
+        $('input[name=\'category\']').val('');
+        $('input[name=\'category\']').closest('.form-group').removeClass('has-error');
+        $('label[for=input-category]').remove();
+        $('#product-category' + item['value']).remove();
+        $('#product-category').append('<div id="product-category' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="product_category[]" class="category-selection" value="' + item['value'] + '" /></div>');
+    }
+});
+
+$.validator.addMethod("xrequire_from_group", $.validator.methods.require_from_group, '{{ mandatory }}');
+$('#product-category').delegate('.fa-minus-circle', 'click', function() {
+    $(this).parent().remove();
+});
+
+$(document).on('change', '.googleshopping_root', function() {
+    $(this).parent().nextAll('.col-sm-10').remove();
+    $(this).parent().nextAll('.col-sm-2').remove();
+    var category_id = $(this).val();
+    if(category_id != 0) {
+        $.ajax({
+            url: 'index.php?route={{ module_path }}/googleshopping/ajaxProcessGetSubcategories&{{ token_key }}={{ token }}&category_id='+category_id,
+            dataType: 'json',
+            beforeSend: function() {
+                $("[name='googleshopping[profile][googleshopping_category]']").closest('.col-sm-10').parent().append('<div class="image-loader-temp"><img src="{{ image_loader }}"</div>');
+            },
+            success: function(json) {
+                $('.image-loader-temp').remove();
+                if(json){
+                    var arr = $.map(json, function(item) { return item });
+                    var html = '<div class="col-sm-2"></div><div class="col-sm-10">';
+                    html+= '<select class="form-control googleshopping_root subcat">';
+                    for(i = 0; i < arr.length; i++){
+                        html+= '<option value="'+arr[i]['category_code']+'">'+arr[i]['name']+'</option>';
+                    }
+                    html+= '</div>';
+                    $("[name='googleshopping[profile][googleshopping_category]']").closest('.col-sm-10').parent().append(html);
+
+                } else{
+                    html = '<div class="col-sm-2"></div><div class="col-sm-10"><input type="button" id="confirm_cat" value="Confirm"></div>';
+                    $("[name='googleshopping[profile][googleshopping_category]']").closest('.col-sm-10').parent().append(html);
+                }
+            }
+        });
+    }
+});
+
+$(document).on('click', '#confirm_cat', function() {
+    var final;
+    $(".googleshopping_root").each(function() {
+        final = ($(this).val());
+        if (final == 'undefined' || final == 0) {
+            alert('Select till leaf category');
+            return false;
+        }
+    });
+    var selected_cat = final;
+    console.log(selected_cat);
+    var str = [];
+    $('.googleshopping_root option:selected').each(function() {
+        str.push($(this).text());
+    });
+    var cat_text = (str.join('>>'));
+    document.getElementById('googleshopping_cat_text').value = cat_text;
+    console.log(cat_text);
+    document.getElementById('id_googleshopping_cat_final').value = selected_cat;
+    $('<p id="cat_text">' + cat_text + '</p>').appendTo(document.getElementById("googleshopping-category").closest('.col-sm-10'));
+    $(".googleshopping_root").hide();
+    $(".googleshopping_root_text").hide();
+    $("#confirm_cat").hide();
+    html = '<div class="col-sm-2" style="clear:both"></div><div class="col-sm-10"><input type="button" id="change_cat" value="{{ text_change }}"></div>';
+    $("[name='googleshopping[profile][googleshopping_category]']").closest('.col-sm-10').parent().append(html);
+});
+
+$(document).on('click', '#change_cat', function() {
+    $("#cat_text").remove();
+    $("#change_cat").remove();
+    $(".googleshopping_root").show();
+    $(".googleshopping_root_text").show();
+    $("#confirm_cat").show();
+    {% if (id_ebay_profiles is defined) %} 
+            var store_id = $('#ebay-stores').val();
+            $.ajax({
+                url: 'index.php?route={{ module_path }}/ebay/ajaxProcessGetCategories&{{ token_key }}={{ token }}&store_id='+store_id,
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#ebay-category').parent().nextAll('.col-sm-10').remove();
+                },
+                success: function(json) {
+                    var arr = $.map(json, function(item) { return item });
+                    var html = '';
+                    for(i = 0; i < arr.length; i++){
+                        html+= '<option value="'+arr[i]['ebay_categories']+'">'+arr[i]['ebay_category_name']+'</option>';
+                    }
+                    $('#ebay-category').html(html);
+                }
+            });
+    {% endif %}    
+});
+
+$(document).on('change', '#googleshopping-country', function() {
+    var country_id = $(this).val();
+    $("#googleshopping-currency-error").remove();
+    $.ajax({
+        url: 'index.php?route={{ module_path }}/googleshopping/ajaxProcessGetLanguages&{{ token_key }}={{ token }}&country_id=' + country_id,
+        dataType: 'json',
+        success: function(json) {
+            if(json){
+                var arr = $.map(json, function(item) { return item });
+                var html = '';
+                for(i = 0; i < arr.length; i++){
+                    html+= '<option value="'+arr[i]['id_gs_languages']+'">'+arr[i]['lang_name']+'</option>';
+                }
+                $("#googleshopping-language").html(html);
+
+            }
+        }
+    });
+    
+    $.ajax({
+        url: 'index.php?route={{ module_path }}/googleshopping/ajaxProcessGetCurrency&{{ token_key }}={{ token }}&country_id=' + country_id,
+        dataType: 'json',
+        success: function(json) {
+            if(json) {
+                var arr = $.map(json.currencies, function(item) { return item });
+                var html = '';
+                for(i = 0; i < arr.length; i++){
+                    html+= '<option value="'+arr[i]['id_gs_currencies']+'">'+arr[i]['currency_name']+'</option>';
+                }
+                $("#googleshopping-currency").html(html);
+                
+                if(arr.length == 1) {
+                    $("#googleshopping-currency").after('<div id="googleshopping-currency-error" class="text-danger">{{ add_currencies_in_oc }} ' + json.default_code + '</div>');
+                }
+            }
+        }
+    });
+});
+
+$( document ).ready(function() {
+    {% if (id_gs_profiles is defined and id_gs_profiles != '') %} 
+    var status = 1;
+    var google_category_id = '{{ google_category_id }}';
+    var id_gs_profiles = '{{ id_gs_profiles }}';
+    var google_catgeory_text = "{{ google_catgeory_text }}";
+    document.getElementById('googleshopping_cat_text').value = google_catgeory_text;
+    document.getElementById('id_googleshopping_cat_final').value = google_category_id;
+    $('<p id="cat_text">' + google_catgeory_text + '</p>').appendTo(document.getElementById("googleshopping-category").closest('.col-sm-10'));
+    html = '<div class="col-sm-2" style="clear:both"></div><div class="col-sm-10"><input type="button" id="change_cat" value="{{ text_change }}"></div>';
+    $("[name='googleshopping[profile][googleshopping_category]']").closest('.col-sm-10').parent().append(html);
+    $(".googleshopping_root").hide();
+    $(".googleshopping_root_text").hide();
+    $("#cat_text").show();
+    $("#confirm_cat").hide();
+    {% endif %} 
+    
+});
+</script>
+{{ footer }} 

@@ -1,0 +1,101 @@
+{{ header }}{{ column_left }} 
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %} 
+                    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+                {% endfor %} 
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="message-container"></div>
+        {% if (error_warning) %} 
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %} 
+
+        {% if (success) %} 
+            <div class="alert alert-success">{{ success }}</div>
+        {% endif %} 
+        {% if (error) %} 
+            <div class="alert alert-danger">{{ error }}</div>
+        {% endif %} 
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_Synchronization_sync }}</h3>
+            </div>
+            <div class="panel-body">
+                {{ googleshopping_common }} 
+                {% if (general_enable == 1) %} 
+                {% if (profile_count > 0) %} 
+                {% if (feed_count > 0) %} 
+                <fieldset>
+                    <legend>{{ text_feed_sync }}</legend>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="sync_feed">{{ text_feed_sync_default }}</label>
+                        <a class="button-sync" target="_blank" href="{{ feed_sync_link }}">{{ text_feed_sync_button }}</a>
+                    </div>
+                </fieldset>
+                <div style="margin-top: 40px"> </div>
+                <fieldset>
+                    <legend>{{ text_product_status }}</legend>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="sync_feed">{{ text_product_status_sync_default }}</label>
+                        <a class="button-sync" target="_blank" href="{{ product_status_sync_link }}">{{ text_product_status_sync_button }}</a>
+                    </div>
+                </fieldset>
+                <div style="margin-top: 40px"> </div>    
+                <div class="well">
+                    <label>{{ text_cron_config }}</label><br>
+                    <p>{{ text_cron_config_help }}</p>
+
+                    <b>{{ text_cron_via_cp }}</b><br>
+                    <ul>
+                        <li><b>{{ text_feed_sync_default }}:</b> {{ feed_sync_link }}</li>
+                        <li><b>{{ text_product_status_sync_default }}:</b> {{ product_status_sync_link }}</li>
+                    </ul>
+                    <b>{{ text_cron_via_ssh }}</b><br>
+                    <ul>
+                        <li>0 * * * * wget -O /dev/null {{ feed_sync_link }}</li>
+                        <li>0 * * * * wget -O /dev/null {{ product_status_sync_link }}</li>
+                    </ul>
+                </div>
+                {% else %} 
+                <div class="alert alert-danger">{{ text_module_no_feed }}</div>
+                {% endif %} 
+                {% else %} 
+                <div class="alert alert-danger">{{ text_module_no_profile }}</div>
+                {% endif %} 
+                {% else %} 
+                <div class="alert alert-danger">{{ text_module_not_enabled }}</div>
+                {% endif %} 
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .custom-tabs .tile .tile-body i{
+        font-size: 150px !important;
+    }
+    .custom-tabs .tile-body{
+        padding: 15px 56px !important;
+    }
+    .custom-tabs .tile-heading{
+        text-align: center !important;
+    }
+    .button-sync{
+        color: white;
+        background: #25b9d7;
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+</style>
+{{ footer }} 

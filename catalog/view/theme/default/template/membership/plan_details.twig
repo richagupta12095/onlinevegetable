@@ -1,0 +1,222 @@
+{{ header }}
+<div id="container" class="container j-container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+   <div class="row">{% if custom_themename != 'journal2' %}
+     <div class="row">{% endif %}{% if custom_themename == 'journal2' %}{{ column_right }}{% endif %}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-9' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <div class="membership_content">
+        <div class="memberheading">
+          <span>{{ heading_title }}</span>
+        </div>
+        <div class="membership-m-img">
+        {% if mpplan_id==3 %}
+          <img src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---3gold----8-Jan'21.jpg" title="membership" style="width: 100%;"/>
+        
+          {% elseif mpplan_id==4 %}
+          <img src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---4diamond---8-Jan'.jpg" title="membership" style="width: 100%;"/>
+        {% elseif mpplan_id==5 %}
+        <img src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado--5PLATINUM--8-Jan'2.jpg" title="membership" style="width: 100%;"/>
+        {% endif %}
+      </div>
+      <div class="membership-m-desc">
+        {{ top_description }}
+      </div>
+      <div class="membership-m-plan Col-sm-12 col-md-12 col-xs-12">
+        <div class="row col-sm-6 col-md-6 col-xs-6  memship">
+          <div class="col-sm-6 col-md-6 col-xs-6 op-box qtlabel">
+            <label class="control-label text-decorop" for="input-quantity">DURATION:{{ entry_qty }}</label>
+          </div>
+          <div class="col-sm-6 col-md-6 col-xs-6 op-box qtyamt">
+           <select id="monthinput" onchange="changeprice()">
+          <option value="1">1 Month</option>
+          <option value="2">2 Month</option>
+          <option value="3">3 Month</option>
+          <option value="4">4 Month</option>
+          <option value="5">5 Month</option>
+          <option value="6">6 Month</option>
+          <option value="7">7 Month</option>
+          <option value="8">8 Month</option>
+          <option value="9">9 Month</option>
+          <option value="10">10 Month</option>
+          <option value="11">11 Month</option>
+          <option value="12">12 Month</option>
+        </select>
+      </div>
+      </div>
+      
+      <div class="row col-sm-6 col-md-6 col-xs-6  memship">
+
+        <div class="col-sm-6 col-md-6 col-xs-6 op-box qtlabel">
+            <label class="control-label text-decorop" for="input-quantity">QTY:</label>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 op-box qty-plus-minus memship">
+          <button type="button" class="form-control pull-left btn-number btnminus" id="decreasebtn" onclick="decreaseqty()" disabled="disabled" data-type="minus" data-field="quantity">
+          <span class="glyphicon glyphicon-minus"></span>
+          </button>
+          <input id="input-quantity" type="text" name="quantity" value="1" size="2" class="form-control input-number pull-left" />
+          <button type="button" class="form-control pull-left btn-number btnplus" onclick="increaseqty()" data-type="plus" data-field="quantity">
+          <span class="glyphicon glyphicon-plus"></span>
+          </button>
+       </div>
+      </div>
+        
+
+       <div class="row col-sm-6 col-md-6 col-xs-6  memship">
+
+        <div class="col-sm-6 col-md-6 col-xs-6 op-box qtlabel">
+            <label class="control-label text-decorop" for="input-price">PRICE:</label>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 op-box qty-plus-minus memship">
+          <input id="input-price" type="hidden" value="{{ price }}">
+          <span class="pull-left btn add-to-cart btn-danger" id="price-display">{{ price }}</span>
+        </div>
+      </div>
+
+
+       <div class="row col-sm-6 col-md-6 col-xs-6  memship">
+
+        <div class="col-sm-6 col-md-6 col-xs-6 op-box qtlabel">
+            <label class="control-label text-decorop" for="input-weight">WEIGHT(in KG):</label>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6 op-box qty-plus-minus memship">
+          <input id="unit-weight" type="hidden" value="{{ weight/1000 }}">
+          <span class="pull-left btn add-to-cart btn-danger" id="weight-display">{{ weight/1000 }}</span>
+        </div>
+      </div>
+
+        <div class="row" style="margin-right:10px;margin-bottom:10px;">
+          <!--<a href="index.php?route=membership/prices" class="pull-left btn add-to-cart btn-danger" style="font-size: 24px;margin-left:10px;">Other Memberships</a>-->
+          <br/> <br/>
+          <center>
+          <button  class="btn add-to-cart btn-primary" style="font-size: 24px;" rel="{{ mpplan_id }}" onclick="addMembershipMonth()">Buy Membership</button>
+          </center>
+        </div>
+      </div>   
+       <div class="row">
+          {% if column_left and column_right %}
+          {% set jclass = 'xl-50 lg-50 md-50 sm-50 xs-100' %}
+          {% elseif column_left or column_right %}
+          {% set jclass = 'xl-33 lg-33 md-33 sm-50 xs-100' %}
+          {% else %}
+          {% set jclass = 'xl-25 lg-25 md-33 sm-50 xs-100' %}
+          {% endif %}
+          {% if products %}
+          {% for product in products %}
+          <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 {{ jclass }}">
+            <div class="product-thumb">
+              <div class="image"><a><img src="{{ product.thumb }}" alt="{{ product.name }}" class="img-responsive"></a></div>
+              <div class="member_caption">
+                <h4><a>{{ product.name }}</a></h4>
+                <ul class="list-unstyled">
+                  <!--<li><b style="width: 0px;">Weight:</b> {{ product.weight }}</li>-->
+                 <!--<li><b>{{ text_model }}:</b> {{ product.model }}</li>-->
+                  <!--<li><b>{{ text_regualr_price }}:</b> {{ product.price }}</li>-->
+                  <!--<li><b>{{ text_membership_price }}:</b> {{ product.membership_price }}</li>-->
+                  <!--<li><b>{{ text_yousave }}</b> {{ product.save_price }}</li>-->
+                </ul>
+              </div>
+            <!--<div class="button-groups">              
+              <a class="btn btn-warning" type="button" style="width:100%">Free</a>
+                <a href="{{ product.href }}" class="btn btn-warning" type="button">{{ button_view_product }}</a>
+                <button class="btn btn-success" type="button" onclick="cart.add('{{ product.product_id }}')">Buy Membership</button>
+              </div>  -->
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+         <p class="text-center">{{ text_no_product }}</p>
+          {% endif %}
+        </div> 
+        {{ bottom_description }}
+      </div>
+      {{ content_bottom }}</div>
+      <div class="col-sm-3">        
+            <div class="mem-right-box">
+              {% if mpplan_id==3 %}
+              <a href="https://iavocado.in/buy-unlimited-indian-exotic-vegetables-online-diamond-membership">
+                <img style="width:100%;margin-bottom: 10px;" src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---500x300-diamond-Banner--8-Jan'21.jpg" title="Diamond Membership" />
+              </a>  
+              <a href="https://iavocado.in/buy-unlimited-exotic-imported-vegetables-online-platinum-membership">
+                <img style="width:100%;margin-bottom: 10px;" src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---500x300-PLATINUM%20Banner--8-Jan'21.jpg" title="Platinum Membership" />
+              </a>  
+                {% elseif mpplan_id==4 %}
+                <a href="https://iavocado.in/buy-unlimited-indian-vegetables-online-gold-membership">
+                <img style="width:100%;margin-bottom: 10px;" src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---500x300-gold-Banner--8-Jan'21.jpg" title="Gold Membership" />
+              </a> 
+                <a href="https://iavocado.in/buy-unlimited-exotic-imported-vegetables-online-platinum-membership">
+                <img style="width:100%;margin-bottom: 10px;" src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---500x300-PLATINUM%20Banner--8-Jan'21.jpg" title="Platinum Membership" />
+              </a> 
+              {% elseif mpplan_id==5  %}
+              <a href="https://iavocado.in/buy-unlimited-indian-vegetables-online-gold-membership">
+              <img style="width:100%;margin-bottom: 10px;" src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---500x300-gold-Banner--8-Jan'21.jpg" title="Gold Membership" />
+            </a>
+            <a href="https://iavocado.in/buy-unlimited-indian-exotic-vegetables-online-diamond-membership">
+              <img style="width:100%;margin-bottom: 10px;" src="https://iavocado.in/image/catalog/Membership%20Banners/Iavocado---500x300-diamond-Banner--8-Jan'21.jpg" title="Diamond Membership" />
+            </a>    
+              {% endif %}
+              <!--
+              <div class="plan_name plan_name{{ mpplan.mpplan_id }}">{{ mpplan.name }}</div>
+              <h3 class="visible-xs xs-price">{{ mpplan.price }}</h3>
+              <div class="plan_time plan_time{{ mpplan.mpplan_id }}">{{ text_duration }} {{ mpplan.duration }}</div> -->
+            </div>  
+            
+      </div>
+    {% if custom_themename != 'journal2' %}{{ column_right }}{% endif %}
+  {% if custom_themename != 'journal2' %}</div>{% endif %}
+</div></div>
+<script>
+function addMembershipMonth() {
+  var month = document.getElementById("monthinput").value
+  if(month==''){
+    month =1;
+  }
+  var qty = document.getElementById("input-quantity").value;
+  if(qty==''){
+    qty = 1;
+  }  
+  MPMEMBERSHIP.add('75','{{ mpplan_id }}',month,qty);
+}
+
+function changeprice() {
+    var qty = document.getElementById("input-quantity").value;   
+    var month= document.getElementById("monthinput").value;
+    var price = document.getElementById('input-price').value;   
+    document.getElementById('price-display').innerHTML = (price * qty * month).toFixed(2) ;   
+}
+
+function increaseqty() {
+    document.getElementById('decreasebtn').disabled = false; 
+    var qty = document.getElementById("input-quantity").value;   
+    var month= document.getElementById("monthinput").value;
+    var price = document.getElementById('input-price').value;
+    document.getElementById("input-quantity").value = ++(document.getElementById("input-quantity").value); 
+    document.getElementById('price-display').innerHTML = (price * ++qty * month).toFixed(2) ; 
+    document.getElementById('weight-display').innerHTML = (document.getElementById('unit-weight').value * qty).toFixed(2);    
+}
+
+function decreaseqty() {
+  var qty = document.getElementById("input-quantity").value;
+  var month= document.getElementById("monthinput").value;
+  if(qty > 1){
+    document.getElementById("input-quantity").value = --(document.getElementById("input-quantity").value); 
+    var price = document.getElementById('input-price').value;
+    document.getElementById('price-display').innerHTML = ( price* --qty * month).toFixed(2) ; 
+    document.getElementById('weight-display').innerHTML = (document.getElementById('unit-weight').value * qty).toFixed(2);   
+  }else{
+    document.getElementById('decreasebtn').disabled = true;   
+    document.getElementById('weight-display').innerHTML = document.getElementById('unit-weight');   
+  }  
+}
+</script>
+{{ footer }}

@@ -1,0 +1,210 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-e_wallet" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+       {% for breadcrumb in breadcrumbs  %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-e_wallet" class="form-horizontal">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+            <li><a href="#tab-option" data-toggle="tab">{{ tab_option }}</a></li>
+            <li><a href="#tab-image" data-toggle="tab">{{ tab_image }}</a></li>            
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-title">{{ entry_title }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="e_wallet_title" value="{{ e_wallet_title }}" placeholder="{{ entry_title }}" id="input-title" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="e_wallet_status" id="input-status" class="form-control">
+                    {% if e_wallet_status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-option">
+              <fieldset>
+                <legend>Add Money Option</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-max_add">{{ entry_max_add }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" name="e_wallet_max_add" value="{{ e_wallet_max_add }}" placeholder="{{ entry_max_add }}" id="input-max_add" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-min_add">{{ entry_min_add }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" name="e_wallet_min_add" value="{{ e_wallet_min_add }}" placeholder="{{ entry_min_add }}" id="input-min_add" class="form-control" />
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Send Money Option</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-max_send">{{ entry_max_send }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" name="e_wallet_max_send" value="{{ e_wallet_max_send }}" placeholder="{{ entry_max_send }}" id="input-max_send" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-min_send">{{ entry_min_send }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" name="e_wallet_min_send" value="{{ e_wallet_min_send }}" placeholder="{{ entry_min_send }}" id="input-min_send" class="form-control" />
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Withdraw Request Option</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-max_send">{{ entry_max_send }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" name="e_wallet_max_withdraw" value="{{ e_wallet_max_withdraw }}" placeholder="{{ entry_max_send }}" id="input-max_send" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-min_send">{{ entry_min_send }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" name="e_wallet_min_withdraw" value="{{ e_wallet_min_withdraw }}" placeholder="{{ entry_min_send }}" id="input-min_send" class="form-control" />
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Payment Option</legend>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-refund_order_id">{{ entry_refund_order_id }}</label>
+                  <div class="col-sm-10">
+                    <select name="e_wallet_refund_order_id" id="input-refund_order_id" class="form-control">
+                     {% for order_statuse in order_statuses %}
+                      {% if order_statuse.order_status_id == e_wallet_refund_order_id %}
+                      <option value="{{ order_statuse.order_status_id }}" selected="selected">{{ order_statuse.name }}</option>
+                      {% else %}
+                      <option value="{{ order_statuse.order_status_id }}">{{ order_statuse.name }}</option>
+                      {% endif %}
+                      {% endfor %}                      
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-processing_status">{{ entry_processing_status }}</label>
+                  <div class="col-sm-10">
+                    <div class="well well-sm" style="height: 150px; overflow: auto;">
+                      {% if order_statuses %}
+                        {% for order_statuse in order_statuses %}
+                          <div class="checkbox">
+                            <label>
+                              {% if e_wallet_processing_status is iterable and order_statuse.order_status_id in e_wallet_processing_status %}
+                              <input type="checkbox" name="e_wallet_processing_status[]" value="{{ order_statuse.order_status_id }}" checked="checked" />&nbsp;
+                              {{ order_statuse.name }}
+                              {% else %}
+                              <input type="checkbox" name="e_wallet_processing_status[]" value="{{ order_statuse.order_status_id }}" />&nbsp;
+                              {{ order_statuse.name }}
+                              {% endif %}
+                            </label>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-complete_status">{{ entry_complete_status }}</label>
+                  <div class="col-sm-10">
+                    <div class="well well-sm" style="height: 150px; overflow: auto;">
+                      {% if order_statuses %}
+                        {% for order_statuse in order_statuses %}
+                          <div class="checkbox">
+                            <label>
+                              {% if e_wallet_complete_status is iterable and order_statuse.order_status_id in e_wallet_complete_status %}                            
+                              <input type="checkbox" name="e_wallet_complete_status[]" value="{{ order_statuse.order_status_id }}" checked="checked" />&nbsp;
+                              {{ order_statuse.name }}
+                              {% else %}
+                              <input type="checkbox" name="e_wallet_complete_status[]" value="{{ order_statuse.order_status_id }}" />&nbsp;
+                              {{ order_statuse.name }}
+                              {% endif %}                              
+                            </label>
+                          </div>
+                         {% endfor %}
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-payments">{{ entry_payments }}</label>
+                  <div class="col-sm-10">
+                    <div class="well well-sm" style="height: 150px; overflow: auto;">
+                    {% if payments %}
+                        {% for payment in payments %}                        
+                          {% if not (payment == 'e_wallet_payment') %}
+                            <div class="checkbox">
+                              <label>
+                              {% if e_wallet_payments is iterable and  payment in e_wallet_payments %}                           
+                                <input type="checkbox" name="e_wallet_payments[]" value="{{ payment }}" checked="checked" />&nbsp;
+                                {{ payment }}
+                                {% else %}
+                                <input type="checkbox" name="e_wallet_payments[]" value="{{ payment }}" />&nbsp;
+                                {{ payment }}
+                                {% endif %}
+                              </label>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="tab-pane" id="tab-image">
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-image">{{ entry_image }}</label>
+                <div class="col-sm-10">
+                  <a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ image_thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                  <input type="hidden" name="e_wallet_image" value="{{ e_wallet_image }}" id="input-image" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-icon">{{ entry_icon }}</label>
+                <div class="col-sm-10">
+                  <a href="" id="thumb-icon" data-toggle="image" class="img-thumbnail"><img src="{{ icon_thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+                  <input type="hidden" name="e_wallet_icon" value="{{ e_wallet_icon }}" id="input-icon" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}
